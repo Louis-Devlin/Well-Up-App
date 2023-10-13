@@ -131,4 +131,6 @@ dist
 
 #expo 
 .expo
+
+#MacOS DS_Store file
 /.DS_Store
