@@ -1,5 +1,6 @@
 # Well-Up-App
 Project Title : Well Up
+
 Project Supervisor: Liz Stuart
 
 ## Project Vision
