@@ -6,14 +6,19 @@ import {
   FlatList,
   StyleSheet,
 } from "react-native";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import MoodItem from "../componenets/MoodItem";
 export default function LogMood() {
   const [text, setText] = useState("");
-  const [moods, setMoods] = useState<string[] | null>();
-  const [mood, setMood] = useState("");
+  type Mood = {
+    moodId: number;
+    moodName: string;
+    positionX: number;
+    positionY: number;
+  };
+  const [moods, setMoods] = useState<Mood[] | null>();
+  const [mood, setMood] = useState({ moodName: "", moodId: 0 });
   const fetchMoods = async (text: string) => {
     try {
       const sentimentResponse = await axios.get(
@@ -35,7 +40,6 @@ export default function LogMood() {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>How was your day?</Text>
-      <Text>Your curent mood is {mood}</Text>
       <TextInput
         multiline={true}
         numberOfLines={4}
@@ -51,14 +55,14 @@ export default function LogMood() {
         color="#841584"
         accessibilityLabel="Predict Mood"
       />
-
+      <Text>{"\n"}</Text>
       <FlatList
         data={moods || null}
+        ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
         renderItem={({ item }) => {
-          console.log("Rendering item:", item);
           return (
             <MoodItem
-              id={item.id}
+              id={item.moodId}
               name={item.moodName}
               posX={item.positionX}
               posY={item.positionY}
@@ -72,16 +76,15 @@ export default function LogMood() {
 }
 const styles = StyleSheet.create({
   container: {
-  
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    
   },
   input: {
     borderWidth: 1,
     padding: 10,
   },
-  
+
   heading: {
     fontSize: 30,
   },
