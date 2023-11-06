@@ -64,12 +64,6 @@ export default function MoodItem({ id, name, posX, posY, setMood }: ItemProps) {
                 console.log("ANOTHER");
               },
             },
-            {
-              text:"Change date",
-              onPress: () => {
-                // Idea for this is that a datepicker will appear and then you can select a date for how you felt on that day. 
-              }
-            }
           ]);
         }}
         style={getBackgroundStyle(posX, posY) as any}

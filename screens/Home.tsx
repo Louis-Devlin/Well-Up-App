@@ -17,8 +17,14 @@ export default function Home({ route, navigation }: Props) {
           console.log("NAV");
         }}
       >
-        <Text>Mood Stats</Text>
+        <Text>Mood Tracking</Text>
         <Image source={require("../assets/graph.png")} style={Styles.image} />
+      </Pressable>
+      <Pressable style={Styles.center} onPress={() => {
+        navigation.navigate("HabbitTrack")
+      }}>
+        <Text>Habbit Tracking</Text>
+        <Image source={require("../assets/habbit.jpeg")} style={Styles.image} />
       </Pressable>
     </View>
   );

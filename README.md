@@ -10,3 +10,10 @@ For those who wish to monitor their mood and improve their habits and mental hea
 
 
 React Native mobile app written in TypeScript
+
+
+## Sources
+
+https://www.math-only-math.com/images/creating-bar-graphs.png - Bar graph Dummy Graphic
+
+https://jamesclear.com/wp-content/uploads/2019/01/clear-habit-journal_gallery_hi-res_03.jpg - Habbit Dummy Graphic 
