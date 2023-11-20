@@ -4,6 +4,8 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 type RootStackParamList = {
   Home: undefined;
   MoodLog: undefined;
+  HabbitTrack: undefined;
+  MoodLogResult:undefined;
 };
 type Props = NativeStackScreenProps<RootStackParamList, "MoodLog">;
 export default function Home({ route, navigation }: Props) {
@@ -20,9 +22,12 @@ export default function Home({ route, navigation }: Props) {
         <Text>Mood Tracking</Text>
         <Image source={require("../assets/graph.png")} style={Styles.image} />
       </Pressable>
-      <Pressable style={Styles.center} onPress={() => {
-        navigation.navigate("HabbitTrack")
-      }}>
+      <Pressable
+        style={Styles.center}
+        onPress={() => {
+          navigation.navigate("HabbitTrack");
+        }}
+      >
         <Text>Habbit Tracking</Text>
         <Image source={require("../assets/habbit.jpeg")} style={Styles.image} />
       </Pressable>

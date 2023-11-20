@@ -6,19 +6,32 @@ import {
   FlatList,
   StyleSheet,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MoodItem from "../componenets/MoodItem";
-export default function LogMood() {
+type RootStackParamList = {
+  Home: undefined;
+  MoodLog: undefined;
+  HabbitTrack: undefined;
+  MoodLogResult: undefined;
+};
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import MoodTotal from "../componenets/MoodTotal";
+import { MoodTotals } from "../Types/MoodTotals";
+import { ApiCall } from "../functions/ApiCall";
+type Props = NativeStackScreenProps<RootStackParamList, "MoodLogResult">;
+export default function LogMood({ route, navigation }: Props) {
   const [text, setText] = useState("");
   type Mood = {
     moodId: number;
     moodName: string;
     positionX: number;
     positionY: number;
+    colour: string;
   };
+
+  const [totals, setTotals] = useState<MoodTotals>(new MoodTotals());
   const [moods, setMoods] = useState<Mood[] | null>();
-  const [mood, setMood] = useState({ moodName: "", moodId: 0 });
   const fetchMoods = async (text: string) => {
     try {
       const sentimentResponse = await axios.get(
@@ -37,6 +50,9 @@ export default function LogMood() {
       console.error("Error fetching moods:", error);
     }
   };
+  useEffect(() => {
+    ApiCall.getMoodTotals(0).then((response) => setTotals(response));
+  }, []);
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>How was your day?</Text>
@@ -57,7 +73,8 @@ export default function LogMood() {
       />
       <Text>{"\n"}</Text>
       <FlatList
-        data={moods || null}
+        scrollEnabled={false}
+        data={moods ?? null}
         ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
         renderItem={({ item }) => {
           return (
@@ -66,11 +83,14 @@ export default function LogMood() {
               name={item.moodName}
               posX={item.positionX}
               posY={item.positionY}
-              setMood={setMood}
+              colour={item.colour}
+              navigation={navigation}
+              setTotals={setTotals}
             />
           );
         }}
       />
+      <MoodTotal totals={totals} />
     </View>
   );
 }
@@ -79,6 +99,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    maxHeight: 600,
   },
   input: {
     borderWidth: 1,

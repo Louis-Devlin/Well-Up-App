@@ -1,14 +1,17 @@
 import { View, Pressable, Text, Alert, StyleSheet } from "react-native";
 import React from "react";
 import getBackgroundStyle from "../functions/Styles";
-import axios from "axios";
+import { ApiCall } from "../functions/ApiCall";
+import { ApiResponse } from "../Types/ApiResponse";
 
 type ItemProps = {
   id: number;
   name: string;
   posX: number;
   posY: number;
-  setMood: any;
+  navigation: any;
+  colour: string;
+  setTotals: any;
 };
 const getTextStyle = (posX: number, posY: number) => {
   if (posX < 5 && posY >= 5) {
@@ -19,43 +22,38 @@ const getTextStyle = (posX: number, posY: number) => {
     };
   }
 };
-export default function MoodItem({ id, name, posX, posY, setMood }: ItemProps) {
+export default function MoodItem({
+  id,
+  name,
+  posX,
+  posY,
+  navigation,
+  colour,
+  setTotals,
+}: ItemProps) {
   return (
     <View>
       <Pressable
         onPress={() => {
-          setMood({
-            moodName: name,
-            moodId: id,
-          });
-          console.log(id);
           Alert.alert("Todays Mood", `You have selected ${name}`, [
             {
               text: "Submit",
               onPress: async () => {
-                console.log("Submit");
-                await axios
-                  .post(
-                    "http://localhost:5239/api/MoodLog",
-                    {
-                      userId: 0,
-                      moodId: id,
-                      date: new Date(),
-                    },
-                    {
-                      headers: {
-                        "Content-Type": "application/json",
-                        "Access-Control-Allow-Origin": "*",
-                      },
-                    }
-                  )
-                  .then((response) => {
-                    console.log(response.data);
-                    console.log("Sent");
-                  })
-                  .catch((err) => {
-                    console.log(err);
+                let result: ApiResponse = await ApiCall.LogMood(
+                  0,
+                  id,
+                  new Date()
+                );
+                if (result.success) {
+                  setTotals((prevTotals: any) => {
+                    return {
+                      ...prevTotals,
+                      [colour]: (prevTotals[colour] += 1),
+                    };
                   });
+                  navigation.navigate("MoodLogResult");
+                }
+                // Error Here
               },
             },
             {
@@ -66,7 +64,7 @@ export default function MoodItem({ id, name, posX, posY, setMood }: ItemProps) {
             },
           ]);
         }}
-        style={getBackgroundStyle(posX, posY) as any}
+        style={getBackgroundStyle(colour) as any}
       >
         <Text style={getTextStyle(posX, posY) as any}>{name}</Text>
       </Pressable>
