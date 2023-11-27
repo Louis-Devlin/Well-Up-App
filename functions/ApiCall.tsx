@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ApiResponse } from "../Types/ApiResponse";
 import { MoodTotals } from "../Types/MoodTotals";
+import { HabitTotals } from "../Types/HabitTotals";
 export class ApiCall {
   static async LogMood(
     userId: number,
@@ -53,5 +54,45 @@ export class ApiCall {
       });
     });
     return totals;
+  }
+
+  static async getLoggedHabits(userId: number): Promise<ApiResponse> {
+    let response: ApiResponse = {
+      responseData: "",
+      success: false,
+      error: "",
+    };
+    const call = await axios
+      .get(`http://localhost:5239/api/HabitLog/api/HabitLog/User/${userId}`)
+      .then((res) => {
+        response.responseData = res;
+        response.success = true;
+      });
+    return response;
+  }
+
+  static async LogHabit(userId: number, habbitId: number, date: Date) {
+    const response = new ApiResponse();
+    axios
+      .post(
+        "http://localhost:5239/api/HabitLog",
+        {
+          userId: userId,
+          habitId: habbitId,
+          date: date,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        response.responseData = res.data;
+        response.success = true;
+      })
+      .catch((err) => {
+        response.error = err;
+      });
   }
 }
