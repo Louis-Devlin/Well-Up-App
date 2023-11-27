@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ApiResponse } from "../Types/ApiResponse";
 import { MoodTotals } from "../Types/MoodTotals";
-import { HabitTotals } from "../Types/HabitTotals";
+import { Habit } from "../Types/Habit";
 export class ApiCall {
   static async LogMood(
     userId: number,
@@ -94,5 +94,13 @@ export class ApiCall {
       .catch((err) => {
         response.error = err;
       });
+  }
+  static async GetHabits(): Promise<Habit[]> {
+    let habits: Habit[] = [];
+    await axios.get("http://localhost:5239/api/Habit").then((res) => {
+      habits = res.data;
+      console.log(`Response : ${res.data}`);
+    });
+    return habits;
   }
 }
