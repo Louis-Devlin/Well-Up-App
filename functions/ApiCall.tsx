@@ -2,6 +2,7 @@ import axios from "axios";
 import { ApiResponse } from "../Types/ApiResponse";
 import { MoodTotals } from "../Types/MoodTotals";
 import { Habit } from "../Types/Habit";
+import { UserHabitRequest } from "../Types/UserHabitRequest";
 export class ApiCall {
   static async LogMood(
     userId: number,
@@ -102,5 +103,21 @@ export class ApiCall {
       console.log(`Response : ${res.data}`);
     });
     return habits;
+  }
+
+  static async StartTrackingHabit(
+    trackHabit: UserHabitRequest
+  ): Promise<ApiResponse> {
+    let response = new ApiResponse();
+    await axios
+      .post("http://localhost:5239/api/UserHabit", trackHabit)
+      .then((res) => {
+        response = res.data;
+        response.success = true;
+      })
+      .catch((err) => {
+        response.error = err;
+      });
+    return response;
   }
 }
