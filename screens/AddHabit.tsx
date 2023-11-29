@@ -64,26 +64,26 @@ export default function AddHabit({ route, navigation }: Props) {
       return false;
     }
   };
-  const addNew = async () => {
-    const userResponse = await new Promise<boolean>((resolve) => {
-      try {
-        Alert.prompt(
-          "Add New Habit",
-          "Please enter the new habit you wish to track",
+  const addNew = async (): Promise<boolean> => {
+    try {
+      const userResponse = await new Promise<boolean>((resolve) => {
+        Alert.alert(
+          "New Habit",
+          "Would you like to start tracking this habit?",
           [
             {
-              text: "Cancel",
-              onPress: () => {},
+              text: "No",
+              onPress: () => resolve(false),
             },
             {
-              text: "Submit",
+              text: "Yes",
               onPress: (habitName: any) => {
                 let request: UserHabitRequest = {
                   userId: 0,
                   habitId: -1,
                   habitName: habitName,
                 };
-                ApiCall.StartTrackingHabit(request).then((response) => {
+                ApiCall.StartTrackingHabit(request).then((res) => {
                   console.log("Sucess");
                   resolve(true);
                 });
@@ -91,15 +91,15 @@ export default function AddHabit({ route, navigation }: Props) {
             },
           ]
         );
-        if (userResponse) {
-          navigation.goBack();
-        }
-        return userResponse;
-      } catch (error) {
-        console.error(`Error: ${error}`);
-        return false;
+      });
+      if (userResponse) {
+        navigation.goBack();
       }
-    });
+      return userResponse;
+    } catch (error) {
+      console.error(`Error: ${error}`);
+      return false;
+    }
   };
   return (
     <View>
