@@ -15,7 +15,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="MoodLog" component={LogMood} />
-        <Stack.Screen name="HabbitTrack" component={HabbitTrack} />
+        <Stack.Screen name="HabitTrack" component={HabbitTrack} />
         <Stack.Screen name="MoodLogResult" component={MoodLogResult} />
         <Stack.Screen name="AddHabit" component={AddHabit} />
         <Stack.Screen name="HabitLog" component={HabitLog} />

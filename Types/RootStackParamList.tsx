@@ -3,6 +3,6 @@ export type RootStackParamList = {
   MoodLog: undefined;
   HabitTrack: undefined;
   MoodLogResult: undefined;
-  AddHabit: undefined;
+  AddHabit: { userHabits: number[] };
   HabitLog: undefined;
 };

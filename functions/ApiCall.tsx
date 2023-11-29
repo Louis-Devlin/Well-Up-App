@@ -64,7 +64,7 @@ export class ApiCall {
       error: "",
     };
     const call = await axios
-      .get(`http://localhost:5239/api/HabitLog/api/HabitLog/User/${userId}`)
+      .get(`http://localhost:5239/api/UserHabit/${userId}`)
       .then((res) => {
         response.responseData = res;
         response.success = true;

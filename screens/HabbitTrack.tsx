@@ -9,7 +9,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 type Props = NativeStackScreenProps<RootStackParamList, "AddHabit">;
 
 export default function HabbitTrack({ route, navigation }: Props) {
-  const [log, setLog] = useState<HabitTotals[]>();
+  const [log, setLog] = useState<HabitTotals[]>([]);
   useEffect(() => {
     ApiCall.getLoggedHabits(0).then((response) => {
       console.log(response.responseData.data);
@@ -21,7 +21,18 @@ export default function HabbitTrack({ route, navigation }: Props) {
       <View style={styles.buttonContainer}>
         <Icon.Button
           name="plus"
-          onPress={() => navigation.navigate("AddHabit")}
+          onPress={() => {
+            let habits: number[] = [];
+            console.log(log);
+            log.forEach((element) => {
+              console.log(`Currently element: ${element.habitId}`);
+              habits.push(element.habitId);
+            });
+            console.log(`Habits being passed through : ${habits}`);
+            navigation.navigate("AddHabit", {
+              userHabits: habits,
+            });
+          }}
         >
           Add Habit
         </Icon.Button>
@@ -32,7 +43,7 @@ export default function HabbitTrack({ route, navigation }: Props) {
           View past days
         </Icon.Button>
       </View>
-      <HabitTotalsTable log={log} setLog={log} />
+      <HabitTotalsTable log={log} setLog={setLog} />
     </View>
   );
 }
