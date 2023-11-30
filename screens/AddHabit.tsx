@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { ApiCall } from "../functions/ApiCall";
 import { Habit } from "../Types/Habit";
 import Icon from "react-native-vector-icons/AntDesign";
+import EntypoIcon from "react-native-vector-icons/Entypo"
 import { UserHabitRequest } from "../Types/UserHabitRequest";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Types/RootStackParamList";
@@ -108,12 +109,12 @@ export default function AddHabit({ route, navigation }: Props) {
       </Icon.Button>
       {habits?.map((item: Habit) => (
         <View style={styles.container} key={item.habitId}>
-          <Button
-            title={item.habitName}
+          <EntypoIcon.Button
+            name="add-to-list"
             onPress={() => {
               startTracking(item.habitId);
             }}
-          />
+          >{item.habitName}</EntypoIcon.Button>
         </View>
       ))}
     </View>

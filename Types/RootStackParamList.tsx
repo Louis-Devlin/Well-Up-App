@@ -4,5 +4,5 @@ export type RootStackParamList = {
   HabitTrack: undefined;
   MoodLogResult: undefined;
   AddHabit: { userHabits: number[] };
-  HabitLog: undefined;
+  HabitLog: { habitLog: any };
 };

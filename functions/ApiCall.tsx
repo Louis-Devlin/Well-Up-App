@@ -3,6 +3,7 @@ import { ApiResponse } from "../Types/ApiResponse";
 import { MoodTotals } from "../Types/MoodTotals";
 import { Habit } from "../Types/Habit";
 import { UserHabitRequest } from "../Types/UserHabitRequest";
+import { HabitLog, HabitLogResponse } from "../Types/HabitLogResponse";
 export class ApiCall {
   static async LogMood(
     userId: number,
@@ -57,19 +58,35 @@ export class ApiCall {
     return totals;
   }
 
-  static async getLoggedHabits(userId: number): Promise<ApiResponse> {
+  static async getLoggedHabitsByDate(
+    userId: number,
+    date: string
+  ): Promise<ApiResponse> {
     let response: ApiResponse = {
       responseData: "",
       success: false,
       error: "",
     };
     const call = await axios
-      .get(`http://localhost:5239/api/UserHabit/${userId}`)
+      .get(`http://localhost:5239/api/UserHabit?id=${userId}&${date}`)
       .then((res) => {
         response.responseData = res;
         response.success = true;
       });
     return response;
+  }
+  static async getAllLoggedHabits(userId: number): Promise<HabitLogResponse[]> {
+    let habitList: HabitLogResponse[] = [];
+    await axios
+      .get(`http://localhost:5239/api/HabitLog/${userId}`)
+      .then((response) => {
+        habitList = response.data.map((item: any) => ({
+          ...item,
+          date: new Date(item.date),
+        }));
+      });
+
+    return habitList;
   }
 
   static async LogHabit(userId: number, habbitId: number, date: Date) {

@@ -11,10 +11,12 @@ type Props = NativeStackScreenProps<RootStackParamList, "AddHabit">;
 export default function HabbitTrack({ route, navigation }: Props) {
   const [log, setLog] = useState<HabitTotals[]>([]);
   useEffect(() => {
-    ApiCall.getLoggedHabits(0).then((response) => {
-      console.log(response.responseData.data);
-      setLog(response.responseData.data);
-    });
+    ApiCall.getLoggedHabitsByDate(0, new Date().toISOString()).then(
+      (response) => {
+        console.log(response.responseData.data);
+        setLog(response.responseData.data);
+      }
+    );
   }, []);
   return (
     <View style={styles.container}>
