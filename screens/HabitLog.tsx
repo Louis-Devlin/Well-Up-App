@@ -10,7 +10,10 @@ import { HabitLogResponse } from "../Types/HabitLogResponse";
 type Props = NativeStackScreenProps<RootStackParamList, "HabitLog">;
 export default function HabitLog({ route, navigation }: Props) {
   const openDayView = (day: any) => {
-    console.log(day);
+    console.log(new Date(day.dateString).toISOString());
+    navigation.navigate("PastLogs", {
+      date: new Date(day.dateString).toISOString(),
+    });
   };
   const [habitList, setHabitList] = useState<HabitLogResponse[]>([]);
   const [habitDaysList, setHabitDaysList] = useState<any>();

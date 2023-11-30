@@ -5,4 +5,5 @@ export type RootStackParamList = {
   MoodLogResult: undefined;
   AddHabit: { userHabits: number[] };
   HabitLog: { habitLog: any };
+  PastLogs: { date: string };
 };

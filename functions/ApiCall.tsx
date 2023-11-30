@@ -70,6 +70,10 @@ export class ApiCall {
     const call = await axios
       .get(`http://localhost:5239/api/UserHabit?id=${userId}&${date}`)
       .then((res) => {
+        console.log(
+          `URL of Request is http://localhost:5239/api/UserHabit?id=${userId}&date=${date} `
+        );
+        console.log(res.data)
         response.responseData = res;
         response.success = true;
       });

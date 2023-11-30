@@ -8,6 +8,7 @@ import MoodLogResult from "./screens/MoodLogResult";
 import { RootStackParamList } from "./Types/RootStackParamList";
 import AddHabit from "./screens/AddHabit";
 import HabitLog from "./screens/HabitLog";
+import PastDays from "./screens/PastDays";
 export default function App() {
   const Stack = createNativeStackNavigator<RootStackParamList>();
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Stack.Screen name="MoodLogResult" component={MoodLogResult} />
         <Stack.Screen name="AddHabit" component={AddHabit} />
         <Stack.Screen name="HabitLog" component={HabitLog} />
+        <Stack.Screen name="PastLogs" component={PastDays} />
       </Stack.Navigator>
     </NavigationContainer>
   );
