@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { ApiCall } from "../functions/ApiCall";
 import { Habit } from "../Types/Habit";
 import Icon from "react-native-vector-icons/AntDesign";
-import EntypoIcon from "react-native-vector-icons/Entypo"
+import EntypoIcon from "react-native-vector-icons/Entypo";
 import { UserHabitRequest } from "../Types/UserHabitRequest";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Types/RootStackParamList";
@@ -68,16 +68,16 @@ export default function AddHabit({ route, navigation }: Props) {
   const addNew = async (): Promise<boolean> => {
     try {
       const userResponse = await new Promise<boolean>((resolve) => {
-        Alert.alert(
+        Alert.prompt(
           "New Habit",
-          "Would you like to start tracking this habit?",
+          "Please enter the habit you want to start tracking?",
           [
             {
-              text: "No",
+              text: "Cancel",
               onPress: () => resolve(false),
             },
             {
-              text: "Yes",
+              text: "Submit",
               onPress: (habitName: any) => {
                 let request: UserHabitRequest = {
                   userId: 0,
@@ -104,9 +104,10 @@ export default function AddHabit({ route, navigation }: Props) {
   };
   return (
     <View>
-      <Icon.Button size={20} name="question" onPress={addNew}>
+      <Icon.Button size={20} name="question" onPress={addNew} style={styles.habitNotHereButton}>
         Habit not here
       </Icon.Button>
+      <Text style={styles.availableHabitsText}>Avaialble Habits</Text>
       {habits?.map((item: Habit) => (
         <View style={styles.container} key={item.habitId}>
           <EntypoIcon.Button
@@ -114,16 +115,31 @@ export default function AddHabit({ route, navigation }: Props) {
             onPress={() => {
               startTracking(item.habitId);
             }}
-          >{item.habitName}</EntypoIcon.Button>
+          >
+            {item.habitName}
+          </EntypoIcon.Button>
         </View>
       ))}
     </View>
   );
 }
 const styles = StyleSheet.create({
+  habitNotHereButton: {
+    flexDirection: 'row', // Ensure the icon and text are in the same row
+    alignItems: 'center',
+    margin: 10,
+  },
+  buttonText: {
+    marginLeft: 5, // Add some spacing between the icon and text
+  },
+  availableHabitsText: {
+    fontSize: 24, // Adjust the font size as needed
+    textAlign: 'center',
+    marginTop: 10, // Add margin to separate from the button
+  },
   container: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 5,
   },
 });

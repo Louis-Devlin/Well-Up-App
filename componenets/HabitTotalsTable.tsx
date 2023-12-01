@@ -17,15 +17,16 @@ export default function HabitTotalsTable({ log, setLog }: ItemProps) {
           <DataTable.Title>Add</DataTable.Title>
         </DataTable.Header>
         {log?.slice(0, log.length).map((item: any, index: number) => (
-          <DataTable.Row key={index}>
+          <DataTable.Row key={item.habitId}>
             <DataTable.Cell>{item.habitName}</DataTable.Cell>
             <DataTable.Cell>{item.count}</DataTable.Cell>
             <DataTable.Cell
               onPress={async () => {
-                let current = [...log];
-                current[index].count++;
-                await ApiCall.LogHabit(0, item.habbitId, new Date());
-                setLog(current);
+                await ApiCall.LogHabit(0, item.habitId, new Date()).then(() => {
+                  let current = [...log];
+                  current[index].count++;
+                  setLog(current);
+                });
               }}
             >
               +
