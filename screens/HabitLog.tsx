@@ -34,11 +34,6 @@ export default function HabitLog({ route, navigation }: Props) {
       setHabitDaysList(dateList);
     });
   };
-  useFocusEffect(
-    useCallback(() => {
-      setHabits();
-    }, [])
-  );
   useEffect(() => {
     setHabits();
   }, []);

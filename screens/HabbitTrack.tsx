@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { RootStackParamList } from "../Types/RootStackParamList";
 import { View, StyleSheet } from "react-native";
 import { ApiCall } from "../functions/ApiCall";
@@ -6,10 +6,22 @@ import Icon from "react-native-vector-icons/AntDesign";
 import { HabitTotals } from "../Types/HabitTotals";
 import HabitTotalsTable from "../componenets/HabitTotalsTable";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useFocusEffect } from "@react-navigation/native";
 type Props = NativeStackScreenProps<RootStackParamList, "AddHabit">;
 
 export default function HabbitTrack({ route, navigation }: Props) {
   const [log, setLog] = useState<HabitTotals[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      ApiCall.getLoggedHabitsByDate(0, new Date().toISOString()).then(
+        (response) => {
+          console.log(response.responseData.data);
+          setLog(response.responseData.data);
+        }
+      );
+    }, [])
+  );
   useEffect(() => {
     ApiCall.getLoggedHabitsByDate(0, new Date().toISOString()).then(
       (response) => {
