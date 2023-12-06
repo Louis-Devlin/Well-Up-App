@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { RootStackParamList } from "../Types/RootStackParamList";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import { ApiCall } from "../functions/ApiCall";
 import Icon from "react-native-vector-icons/AntDesign";
 import { HabitTotals } from "../Types/HabitTotals";
@@ -11,24 +11,41 @@ type Props = NativeStackScreenProps<RootStackParamList, "AddHabit">;
 
 export default function HabbitTrack({ route, navigation }: Props) {
   const [log, setLog] = useState<HabitTotals[]>([]);
-
-  useFocusEffect(
-    useCallback(() => {
-      ApiCall.getLoggedHabitsByDate(0, new Date().toISOString()).then(
-        (response) => {
-          console.log(response.responseData.data);
-          setLog(response.responseData.data);
-        }
-      );
-    }, [])
-  );
-  useEffect(() => {
-    ApiCall.getLoggedHabitsByDate(0, new Date().toISOString()).then(
+  const updateTotals = () => {
+    ApiCall.getLoggedHabitsByDate(0, new Date().toISOString(), true).then(
       (response) => {
         console.log(response.responseData.data);
         setLog(response.responseData.data);
       }
     );
+  };
+  const onLongPressCall = (item: HabitTotals) => {
+    Alert.alert(
+      "Stop Tracking Habit",
+      "Are you sure you want to stop tracking this habit ?",
+      [
+        {
+          text: "No",
+          onPress: () => {},
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            ApiCall.StopTrackingHabit(0, item.habitId).then(() => {
+              updateTotals();
+            });
+          },
+        },
+      ]
+    );
+  };
+  useFocusEffect(
+    useCallback(() => {
+      updateTotals();
+    }, [])
+  );
+  useEffect(() => {
+    updateTotals();
   }, []);
   return (
     <View style={styles.container}>
@@ -57,7 +74,11 @@ export default function HabbitTrack({ route, navigation }: Props) {
           View past days
         </Icon.Button>
       </View>
-      <HabitTotalsTable log={log} setLog={setLog} />
+      <HabitTotalsTable
+        log={log}
+        setLog={setLog}
+        onLongPressCall={onLongPressCall}
+      />
     </View>
   );
 }

@@ -12,8 +12,8 @@ export default function PastDays({ route, navigation }: Props) {
   const [log, setLog] = useState<HabitTotals[]>([]);
   const { date } = route.params;
   useEffect(() => {
-    ApiCall.getLoggedHabitsByDate(0, date).then((res) => {
-      setLog(res.responseData.data);
+    ApiCall.getLoggedHabitsByDate(0, date, false).then((res) => {
+      setLog(res.responseData.data.filter((x: HabitTotals) => x.count > 0));
       console.log(res.responseData.data);
     });
   }, []);
@@ -25,7 +25,6 @@ export default function PastDays({ route, navigation }: Props) {
           <DataTable.Title>Count</DataTable.Title>
         </DataTable.Header>
         {log?.slice(0, log.length).map((item: HabitTotals, index: number) => (
-            
           <DataTable.Row key={index}>
             <DataTable.Cell>{item.habitName}</DataTable.Cell>
             <DataTable.Cell>{item.count}</DataTable.Cell>

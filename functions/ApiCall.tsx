@@ -3,7 +3,7 @@ import { ApiResponse } from "../Types/ApiResponse";
 import { MoodTotals } from "../Types/MoodTotals";
 import { Habit } from "../Types/Habit";
 import { UserHabitRequest } from "../Types/UserHabitRequest";
-import { HabitLog, HabitLogResponse } from "../Types/HabitLogResponse";
+import { HabitLogResponse } from "../Types/HabitLogResponse";
 export class ApiCall {
   static async LogMood(
     userId: number,
@@ -60,7 +60,8 @@ export class ApiCall {
 
   static async getLoggedHabitsByDate(
     userId: number,
-    date: string
+    date: string,
+    active: boolean
   ): Promise<ApiResponse> {
     let response: ApiResponse = {
       responseData: "",
@@ -70,6 +71,7 @@ export class ApiCall {
     const params = {
       id: userId,
       date: date,
+      active: active,
     };
     const call = await axios
       .get(`http://localhost:5239/api/UserHabit`, { params })
@@ -140,5 +142,30 @@ export class ApiCall {
         response.error = err;
       });
     return response;
+  }
+  static async StopTrackingHabit(userId: number, habitId: number) {
+    const params = {
+      userId: userId,
+      habitId: habitId,
+    };
+    axios
+      .put(`http://localhost:5239/api/UserHabit/${userId}/${habitId}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        switch (res.status) {
+          case 204:
+            console.log("Works");
+            break;
+          case 404:
+            console.log("Not found");
+            break;
+        }
+      })
+      .catch((err) => {
+        console.log(`Error : ${err}`);
+      });
   }
 }
