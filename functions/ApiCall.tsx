@@ -74,7 +74,9 @@ export class ApiCall {
       active: active,
     };
     const call = await axios
-      .get(`http://localhost:5239/api/UserHabit`, { params })
+      .get(`http://localhost:5239/api/UserHabit`, {
+        params,
+      })
       .then((res) => {
         response.responseData = res;
         response.success = true;
@@ -149,11 +151,14 @@ export class ApiCall {
       habitId: habitId,
     };
     axios
-      .put(`http://localhost:5239/api/UserHabit/${userId}/${habitId}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      .put(
+        `http://localhost:5239/api/UserHabit?userId=${userId}&habitId=${habitId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         switch (res.status) {
           case 204:
