@@ -1,6 +1,9 @@
 import axios from "axios";
 import { ApiResponse } from "../Types/ApiResponse";
 import { MoodTotals } from "../Types/MoodTotals";
+import { Habit } from "../Types/Habit";
+import { UserHabitRequest } from "../Types/UserHabitRequest";
+import { HabitLogResponse } from "../Types/HabitLogResponse";
 export class ApiCall {
   static async LogMood(
     userId: number,
@@ -53,5 +56,121 @@ export class ApiCall {
       });
     });
     return totals;
+  }
+
+  static async getLoggedHabitsByDate(
+    userId: number,
+    date: string,
+    active: boolean
+  ): Promise<ApiResponse> {
+    let response: ApiResponse = {
+      responseData: "",
+      success: false,
+      error: "",
+    };
+    const params = {
+      id: userId,
+      date: date,
+      active: active,
+    };
+    const call = await axios
+      .get(`http://localhost:5239/api/UserHabit`, {
+        params,
+      })
+      .then((res) => {
+        response.responseData = res;
+        response.success = true;
+      });
+    return response;
+  }
+  static async getAllLoggedHabits(userId: number): Promise<HabitLogResponse[]> {
+    let habitList: HabitLogResponse[] = [];
+    await axios
+      .get(`http://localhost:5239/api/HabitLog/${userId}`)
+      .then((response) => {
+        habitList = response.data.map((item: any) => ({
+          ...item,
+          date: new Date(item.date),
+        }));
+      });
+
+    return habitList;
+  }
+
+  static async LogHabit(userId: number, habbitId: number, date: Date) {
+    const response = new ApiResponse();
+    axios
+      .post(
+        "http://localhost:5239/api/HabitLog",
+        {
+          userId: userId,
+          habitId: habbitId,
+          date: date,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        response.responseData = res.data;
+        response.success = true;
+      })
+      .catch((err) => {
+        response.error = err;
+      });
+  }
+  static async GetHabits(): Promise<Habit[]> {
+    let habits: Habit[] = [];
+    await axios.get("http://localhost:5239/api/Habit").then((res) => {
+      habits = res.data;
+      console.log(`Response : ${res.data}`);
+    });
+    return habits;
+  }
+
+  static async StartTrackingHabit(
+    trackHabit: UserHabitRequest
+  ): Promise<ApiResponse> {
+    let response = new ApiResponse();
+    await axios
+      .post("http://localhost:5239/api/UserHabit", trackHabit)
+      .then((res) => {
+        response = res.data;
+        response.success = true;
+      })
+      .catch((err) => {
+        response.error = err;
+      });
+    return response;
+  }
+  static async StopTrackingHabit(userId: number, habitId: number) {
+    const params = {
+      userId: userId,
+      habitId: habitId,
+    };
+    axios
+      .put(
+        `http://localhost:5239/api/UserHabit?userId=${userId}&habitId=${habitId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        switch (res.status) {
+          case 204:
+            console.log("Works");
+            break;
+          case 404:
+            console.log("Not found");
+            break;
+        }
+      })
+      .catch((err) => {
+        console.log(`Error : ${err}`);
+      });
   }
 }
