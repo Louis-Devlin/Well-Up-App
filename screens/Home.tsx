@@ -48,7 +48,7 @@ export default function Home({ route, navigation }: Props) {
           console.log("NAV");
         }}
       >
-        <Text>Mood Tracking</Text>
+        <Text>Weekly Logged Moods</Text>
         <PieChart
           accessor="population"
           backgroundColor="transparent"
@@ -56,32 +56,32 @@ export default function Home({ route, navigation }: Props) {
           chartConfig={chartConfig}
           data={[
             {
-              name: "Red",
+              name: "😠",
               population: moodTotals?.red,
               color: "rgba(255, 0, 0, 0.5)",
               legendFontColor: "#7F7F7F",
-              legendFontSize: 15,
+              legendFontSize: 25,
             },
             {
-              name: "Blue",
+              name: "😴,😞",
               population: moodTotals?.blue,
               color: "rgba(0, 0, 255, 0.5)",
               legendFontColor: "#7F7F7F",
-              legendFontSize: 15,
+              legendFontSize: 25,
             },
             {
-              name: "Green",
+              name: "😴,😄",
               population: moodTotals?.green,
               color: "rgba(0, 255, 0, 0.5)",
               legendFontColor: "#7F7F7F",
-              legendFontSize: 15,
+              legendFontSize: 25,
             },
             {
-              name: "Yellow",
+              name: "😁",
               population: moodTotals?.yellow,
               color: "rgba(255, 255, 0, 0.5)",
               legendFontColor: "#7F7F7F",
-              legendFontSize: 15,
+              legendFontSize: 25,
             },
           ]}
           width={380}
