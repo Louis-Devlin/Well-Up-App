@@ -67,14 +67,14 @@ export default function Home({ route, navigation }: Props) {
               legendFontSize: 25,
             },
             {
-              name: "😴,😞",
+              name: "😞 😴",
               population: moodTotals?.blue,
               color: "rgba(0, 0, 255, 0.5)",
               legendFontColor: "#7F7F7F",
               legendFontSize: 25,
             },
             {
-              name: "😴,😄",
+              name: "😄 😴",
               population: moodTotals?.green,
               color: "rgba(0, 255, 0, 0.5)",
               legendFontColor: "#7F7F7F",
