@@ -94,7 +94,6 @@ export default function Home({ route, navigation }: Props) {
           navigation.navigate("HabitTrack");
         }}
       >
-        <Text>Habbit Tracking</Text>
         <LineChart
           data={{
             labels: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
