@@ -198,7 +198,6 @@ export class ApiCall {
       .then((response) => {
         totals = response.data;
       });
-    console.log(totals);
     return totals;
   }
 }

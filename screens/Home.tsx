@@ -6,6 +6,7 @@ import { LineChart, PieChart } from "react-native-chart-kit";
 import { ApiCall } from "../functions/ApiCall";
 import { MoodTotals } from "../Types/MoodTotals";
 import { HabitTotalsWeekly } from "../Types/HabitTotalsWeekly";
+import Icon from "react-native-vector-icons/AntDesign";
 type Props = NativeStackScreenProps<RootStackParamList, "MoodLog">;
 export default function Home({ route, navigation }: Props) {
   const [moodTotals, setMoodTotals] = useState<MoodTotals>();
@@ -48,7 +49,10 @@ export default function Home({ route, navigation }: Props) {
           console.log("NAV");
         }}
       >
-        <Text>Weekly Logged Moods</Text>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text>Weekly Logged Moods</Text>
+          <Icon name="right" size={20} />
+        </View>
         <PieChart
           accessor="population"
           backgroundColor="transparent"
@@ -94,6 +98,17 @@ export default function Home({ route, navigation }: Props) {
           navigation.navigate("HabitTrack");
         }}
       >
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            height: 30,
+          }}
+        >
+          <Text>Weekly Logged Habbits </Text>
+          <Icon name="right" size={20} />
+        </View>
+
         <LineChart
           data={{
             labels: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
@@ -111,7 +126,6 @@ export default function Home({ route, navigation }: Props) {
                 strokeWidth: 2,
               },
             ],
-            legend: ["Habits Completed This Week"], // optional
           }}
           width={380}
           height={280}
