@@ -126,20 +126,18 @@ export default function AddHabit({ route, navigation }: Props) {
 const styles = StyleSheet.create({
   habitNotHereButton: {
     flexDirection: 'row', // Ensure the icon and text are in the same row
-    alignItems: 'center',
+    
     margin: 10,
   },
   buttonText: {
-    marginLeft: 5, // Add some spacing between the icon and text
+    marginLeft: 5, 
   },
   availableHabitsText: {
-    fontSize: 24, // Adjust the font size as needed
+    fontSize: 24,
     textAlign: 'center',
-    marginTop: 10, // Add margin to separate from the button
+    marginTop: 10, 
   },
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
     padding: 5,
   },
 });

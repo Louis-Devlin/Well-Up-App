@@ -12,6 +12,7 @@ type ItemProps = {
   navigation: any;
   colour: string;
   setTotals: any;
+  index: number;
 };
 const getTextStyle = (posX: number, posY: number) => {
   if (posX < 5 && posY >= 5) {
@@ -30,6 +31,7 @@ export default function MoodItem({
   navigation,
   colour,
   setTotals,
+  index,
 }: ItemProps) {
   return (
     <View>
@@ -64,7 +66,7 @@ export default function MoodItem({
             },
           ]);
         }}
-        style={getBackgroundStyle(colour) as any}
+        style={getBackgroundStyle(colour, index) as any}
       >
         <Text style={getTextStyle(posX, posY) as any}>{name}</Text>
       </Pressable>

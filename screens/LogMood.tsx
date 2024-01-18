@@ -55,7 +55,7 @@ export default function LogMood({ route, navigation }: Props) {
   }, []);
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>How was your day?</Text>
+      <Text style={styles.heading}>What did you do today?</Text>
       <TextInput
         multiline={true}
         numberOfLines={4}
@@ -76,7 +76,7 @@ export default function LogMood({ route, navigation }: Props) {
         scrollEnabled={false}
         data={moods ?? null}
         ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
-        renderItem={({ item }) => {
+        renderItem={({ item, index }) => {
           return (
             <MoodItem
               id={item.moodId}
@@ -86,6 +86,7 @@ export default function LogMood({ route, navigation }: Props) {
               colour={item.colour}
               navigation={navigation}
               setTotals={setTotals}
+              index={index}
             />
           );
         }}
