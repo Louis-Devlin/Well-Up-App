@@ -1,12 +1,15 @@
-import { Text, View, StyleSheet, Pressable, Image } from "react-native";
+import { Text, View, StyleSheet, Pressable } from "react-native";
 import React, { useState, useEffect } from "react";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Types/RootStackParamList";
-import { LineChart, PieChart } from "react-native-chart-kit";
+import { PieChart } from "react-native-chart-kit";
 import { ApiCall } from "../functions/ApiCall";
 import { MoodTotals } from "../Types/MoodTotals";
 import { HabitTotalsWeekly } from "../Types/HabitTotalsWeekly";
+import WeeklyHabitChart from "../componenets/WeeklyHabitChart";
 import Icon from "react-native-vector-icons/AntDesign";
+import { AbstractChartConfig } from "react-native-chart-kit/dist/AbstractChart";
+import WeeklyMoodChart from "../componenets/WeeklyMoodChart";
 type Props = NativeStackScreenProps<RootStackParamList, "MoodLog">;
 export default function Home({ route, navigation }: Props) {
   const [moodTotals, setMoodTotals] = useState<MoodTotals>();
@@ -31,12 +34,12 @@ export default function Home({ route, navigation }: Props) {
     getWeeklyMoodTotals();
     getWeeklyHabiitTotals();
   }, []);
-  const chartConfig = {
+  const chartConfig: AbstractChartConfig = {
     backgroundGradientFrom: "#FFFFFF",
     backgroundGradientFromOpacity: 0,
     backgroundGradientTo: "#FFFFFF",
     backgroundGradientToOpacity: 0.5,
-    color: (opacity = 0.1) => `rgba(0,0, 200, ${opacity})`,
+    color: (opacity = 0.1) => `rgba(0, 0, 200, ${opacity})`,
     decimalPlaces: 0,
   };
   return (
@@ -49,48 +52,7 @@ export default function Home({ route, navigation }: Props) {
           console.log("NAV");
         }}
       >
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text>Weekly Logged Moods</Text>
-          <Icon name="right" size={20} />
-        </View>
-        <PieChart
-          accessor="population"
-          backgroundColor="transparent"
-          paddingLeft="15"
-          chartConfig={chartConfig}
-          data={[
-            {
-              name: "😠",
-              population: moodTotals?.red,
-              color: "rgba(255, 0, 0, 0.5)",
-              legendFontColor: "#7F7F7F",
-              legendFontSize: 25,
-            },
-            {
-              name: "😞 😴",
-              population: moodTotals?.blue,
-              color: "rgba(0, 0, 255, 0.5)",
-              legendFontColor: "#7F7F7F",
-              legendFontSize: 25,
-            },
-            {
-              name: "😄 😴",
-              population: moodTotals?.green,
-              color: "rgba(0, 255, 0, 0.5)",
-              legendFontColor: "#7F7F7F",
-              legendFontSize: 25,
-            },
-            {
-              name: "😁",
-              population: moodTotals?.yellow,
-              color: "rgba(255, 255, 0, 0.5)",
-              legendFontColor: "#7F7F7F",
-              legendFontSize: 25,
-            },
-          ]}
-          width={380}
-          height={280}
-        ></PieChart>
+        <WeeklyMoodChart moodTotals={moodTotals} chartConfig={chartConfig} />
       </Pressable>
       <Pressable
         style={Styles.center}
@@ -98,44 +60,7 @@ export default function Home({ route, navigation }: Props) {
           navigation.navigate("HabitTrack");
         }}
       >
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            height: 30,
-          }}
-        >
-          <Text>Weekly Logged Habbits </Text>
-          <Icon name="right" size={20} />
-        </View>
-
-        <LineChart
-          data={{
-            labels: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
-            datasets: [
-              {
-                data: [
-                  habitTotals?.Monday,
-                  habitTotals?.Tuesday,
-                  habitTotals?.Wednesday,
-                  habitTotals?.Thursday,
-                  habitTotals?.Friday,
-                  habitTotals?.Saturday,
-                  habitTotals?.Sunday,
-                ],
-                strokeWidth: 2,
-              },
-            ],
-          }}
-          width={380}
-          height={280}
-          chartConfig={chartConfig}
-          fromNumber={
-            Math.max(...Object.values(habitTotals)) > 4
-              ? Math.max(...Object.values(habitTotals))
-              : 4
-          }
-        />
+        <WeeklyHabitChart habitTotals={habitTotals} chartConfig={chartConfig} />
       </Pressable>
     </View>
   );
