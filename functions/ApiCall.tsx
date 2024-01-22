@@ -4,6 +4,7 @@ import { MoodTotals } from "../Types/MoodTotals";
 import { Habit } from "../Types/Habit";
 import { UserHabitRequest } from "../Types/UserHabitRequest";
 import { HabitLogResponse } from "../Types/HabitLogResponse";
+import { HabitTotalsWeekly } from "../Types/HabitTotalsWeekly";
 export class ApiCall {
   static async LogMood(
     userId: number,
@@ -11,6 +12,11 @@ export class ApiCall {
     date: Date
   ): Promise<ApiResponse> {
     const response = new ApiResponse();
+    console.log({
+      userId: userId,
+      moodId: moodId,
+      date: date,
+    });
     await axios
       .post(
         "http://localhost:5239/api/MoodLog",
@@ -172,5 +178,26 @@ export class ApiCall {
       .catch((err) => {
         console.log(`Error : ${err}`);
       });
+  }
+  static async GetWeeklyMoodTotal(userId: number): Promise<MoodTotals> {
+    let totals: MoodTotals = new MoodTotals();
+    await axios
+      .get(`http://localhost:5239/api/MoodLog/totals/${userId}`)
+      .then((response) => {
+        totals = response.data;
+      });
+
+    return totals;
+  }
+  static async GetWeeklyHabitTotals(
+    userId: number
+  ): Promise<HabitTotalsWeekly> {
+    let totals: HabitTotalsWeekly = new HabitTotalsWeekly();
+    await axios
+      .get(`http://localhost:5239/api/HabitLog/totals/${userId}`)
+      .then((response) => {
+        totals = response.data;
+      });
+    return totals;
   }
 }

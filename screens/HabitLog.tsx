@@ -41,6 +41,8 @@ export default function HabitLog({ route, navigation }: Props) {
   return (
     <View>
       <CalendarList
+        pastScrollRange={3}
+        futureScrollRange={3}
         disabledByDefault
         disableAllTouchEventsForDisabledDays
         markedDates={habitDaysList}

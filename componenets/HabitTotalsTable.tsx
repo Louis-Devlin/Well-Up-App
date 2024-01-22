@@ -1,4 +1,4 @@
-import { Alert, Pressable, View } from "react-native";
+import { Alert, Pressable, StyleSheet, View, Text } from "react-native";
 import { DataTable } from "react-native-paper";
 import React from "react";
 import { HabitTotals } from "../Types/HabitTotals";
@@ -6,9 +6,13 @@ import { ApiCall } from "../functions/ApiCall";
 type ItemProps = {
   log: HabitTotals[];
   setLog: any;
-  onLongPressCall : any;
+  onLongPressCall: any;
 };
-export default function HabitTotalsTable({ log, setLog, onLongPressCall }: ItemProps) {
+export default function HabitTotalsTable({
+  log,
+  setLog,
+  onLongPressCall,
+}: ItemProps) {
   return (
     <View>
       <DataTable>
@@ -18,13 +22,16 @@ export default function HabitTotalsTable({ log, setLog, onLongPressCall }: ItemP
           <DataTable.Title>Add</DataTable.Title>
         </DataTable.Header>
         {log?.slice(0, log.length).map((item: HabitTotals, index: number) => (
-          <Pressable
-            onLongPress={() => onLongPressCall(item)}
-          >
-            <DataTable.Row key={item.habitId}>
-              <DataTable.Cell>{item.habitName}</DataTable.Cell>
-              <DataTable.Cell>{item.count}</DataTable.Cell>
+          <Pressable onLongPress={() => onLongPressCall(item)}>
+            <DataTable.Row style={styles.row} key={item.habitId}>
+              <DataTable.Cell>
+                <Text style={styles.text}>{item.habitName}</Text>
+              </DataTable.Cell>
+              <DataTable.Cell style={{ justifyContent: "flex-end" }}>
+                <Text style={styles.text}>{item.count}</Text>
+              </DataTable.Cell>
               <DataTable.Cell
+                style={{ justifyContent: "flex-end" }}
                 onPress={async () => {
                   await ApiCall.LogHabit(0, item.habitId, new Date()).then(
                     () => {
@@ -35,7 +42,7 @@ export default function HabitTotalsTable({ log, setLog, onLongPressCall }: ItemP
                   );
                 }}
               >
-                +
+                <Text style={styles.text}>+</Text>
               </DataTable.Cell>
             </DataTable.Row>
           </Pressable>
@@ -44,3 +51,11 @@ export default function HabitTotalsTable({ log, setLog, onLongPressCall }: ItemP
     </View>
   );
 }
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 23,
+  },
+  row: {
+    height: 90,
+  },
+});
