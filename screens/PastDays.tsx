@@ -11,7 +11,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "PastLogs">;
 
 export default function PastDays({ route, navigation }: Props) {
   const [habitLog, setHabitLog] = useState<HabitTotals[]>([]);
-  const [moodLog, setMoodLog] = useState<MoodTotals>();
+  const [moodLog, setMoodLog] = useState<any>();
   const { date } = route.params;
   useEffect(() => {
     ApiCall.getLoggedHabitsByDate(0, date, false).then((res) => {
@@ -44,23 +44,19 @@ export default function PastDays({ route, navigation }: Props) {
         <DataTable.Header>
           <DataTable.Title>Mood</DataTable.Title>
           <DataTable.Title>Count</DataTable.Title>
+          <DataTable.Title>Colour</DataTable.Title>
         </DataTable.Header>
-        <DataTable.Row>
-          <DataTable.Cell>😠</DataTable.Cell>
-          <DataTable.Cell>{moodLog?.red}</DataTable.Cell>
-        </DataTable.Row>
-        <DataTable.Row>
-          <DataTable.Cell>😞 😴</DataTable.Cell>
-          <DataTable.Cell>{moodLog?.blue}</DataTable.Cell>
-        </DataTable.Row>
-        <DataTable.Row>
-          <DataTable.Cell>😄 😴</DataTable.Cell>
-          <DataTable.Cell>{moodLog?.green}</DataTable.Cell>
-        </DataTable.Row>
-        <DataTable.Row>
-          <DataTable.Cell>😁</DataTable.Cell>
-          <DataTable.Cell>{moodLog?.yellow}</DataTable.Cell>
-        </DataTable.Row>
+        {moodLog?.map((item: any, index: number) => {
+          return (
+            <DataTable.Row key={index}>
+              <DataTable.Cell>{item.moodName}</DataTable.Cell>
+              <DataTable.Cell>{item.count}</DataTable.Cell>
+              <DataTable.Cell style={{ backgroundColor: item.colour, opacity: 0.6  }}>
+                {<></>}
+              </DataTable.Cell>
+            </DataTable.Row>
+          );
+        })}
       </DataTable>
     </View>
   );

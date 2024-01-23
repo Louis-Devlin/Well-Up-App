@@ -216,7 +216,7 @@ export class ApiCall {
   static async GetLoggedMoodsByDate(
     userId: number,
     date: string
-  ): Promise<MoodTotals> {
+  ): Promise<any> {
     let totals: MoodTotals = new MoodTotals();
     console.log(
       `http://localhost:5239/api/MoodLog/totals/${userId}/${encodeURIComponent(
