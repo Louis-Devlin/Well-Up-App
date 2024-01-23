@@ -12,17 +12,9 @@ type Props = NativeStackScreenProps<RootStackParamList, "PastLogs">;
 export default function PastDays({ route, navigation }: Props) {
   const [habitLog, setHabitLog] = useState<HabitTotals[]>([]);
   const [moodLog, setMoodLog] = useState<any>();
-  const { date } = route.params;
+  const { data } = route.params;
   useEffect(() => {
-    ApiCall.getLoggedHabitsByDate(0, date, false).then((res) => {
-      setHabitLog(
-        res.responseData.data.filter((x: HabitTotals) => x.count > 0)
-      );
-      console.log(res.responseData.data);
-      ApiCall.GetLoggedMoodsByDate(0, date).then((res) => {
-        setMoodLog(res);
-      });
-    });
+    console.log(data);
   }, []);
   return (
     <View>
@@ -31,14 +23,14 @@ export default function PastDays({ route, navigation }: Props) {
           <DataTable.Title>Habit</DataTable.Title>
           <DataTable.Title>Count</DataTable.Title>
         </DataTable.Header>
-        {habitLog
-          ?.slice(0, habitLog.length)
-          .map((item: HabitTotals, index: number) => (
+        {data.data.habitLog.map((item: any, index: number) => {
+          return (
             <DataTable.Row key={index}>
               <DataTable.Cell>{item.habitName}</DataTable.Cell>
               <DataTable.Cell>{item.count}</DataTable.Cell>
             </DataTable.Row>
-          ))}
+          );
+        })}
       </DataTable>
       <DataTable>
         <DataTable.Header>
@@ -46,14 +38,12 @@ export default function PastDays({ route, navigation }: Props) {
           <DataTable.Title>Count</DataTable.Title>
           <DataTable.Title>Colour</DataTable.Title>
         </DataTable.Header>
-        {moodLog?.map((item: any, index: number) => {
+        {data.data.moodLog.map((item: any, index: number) => {
           return (
             <DataTable.Row key={index}>
               <DataTable.Cell>{item.moodName}</DataTable.Cell>
               <DataTable.Cell>{item.count}</DataTable.Cell>
-              <DataTable.Cell style={{ backgroundColor: item.colour, opacity: 0.6  }}>
-                {<></>}
-              </DataTable.Cell>
+              <DataTable.Cell>{item.colour}</DataTable.Cell>
             </DataTable.Row>
           );
         })}
