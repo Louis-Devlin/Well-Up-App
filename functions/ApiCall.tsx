@@ -236,9 +236,11 @@ export class ApiCall {
   }
   static async GetAllLoggedData(userId: number): Promise<any> {
     let response: any;
-    await axios.get(`http://localhost:5239/User/${userId}`).then((res) => {
-      response = res.data;
-    });
+    await axios
+      .get(`https://well-up-api-kurpegc27a-nw.a.run.app/User/${userId}`)
+      .then((res) => {
+        response = res.data;
+      });
     return response;
   }
 }

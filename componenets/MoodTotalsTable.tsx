@@ -1,22 +1,23 @@
 import React from "react";
 import { DataTable } from "react-native-paper";
 type ItemProps = {
-  habitData: any;
+  moodData: any;
 };
-export default function HabitTotalsTable({ habitData }: ItemProps) {
-  console.log(habitData);
+
+export default function MoodTotalsTable({ moodData }: ItemProps) {
   return (
     <DataTable>
       <DataTable.Header>
-        <DataTable.Title>Habit</DataTable.Title>
+        <DataTable.Title>Mood</DataTable.Title>
         <DataTable.Title>Count</DataTable.Title>
+        <DataTable.Title>Colour</DataTable.Title>
       </DataTable.Header>
-      {console.log(habitData)}
-      {habitData?.map((item: any, index: number) => {
+      {moodData?.map((item: any, index: number) => {
         return (
           <DataTable.Row key={index}>
-            <DataTable.Cell>{item.habitName}</DataTable.Cell>
+            <DataTable.Cell>{item.moodName}</DataTable.Cell>
             <DataTable.Cell>{item.count}</DataTable.Cell>
+            <DataTable.Cell>{item.colour}</DataTable.Cell>
           </DataTable.Row>
         );
       })}
