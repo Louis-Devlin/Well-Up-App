@@ -18,18 +18,36 @@ export default function HabitLog({ route, navigation }: Props) {
   };
   const [habitList, setHabitList] = useState<HabitLogResponse[]>([]);
   const [habitDaysList, setHabitDaysList] = useState<any>();
-  const setHabits = () => {
-    ApiCall.getAllLoggedHabits(0).then((habits) => {
-      let dateList: any = {};
-      setHabitList(habits);
+  const [calendarList, setCalendarList] = useState<any>();
 
-      habits.forEach((h) => {
-        let date = h.date.toISOString().split("T")[0];
+  const setHabits = async () => {
+    const red = { key: "red", color: "red" };
+    const blue = { key: "blue", color: "blue" };
+    const yellow = { key: "yellow", color: "yellow" };
+    const green = { key: "green", color: "green" };
+    await ApiCall.GetAllLoggedData(0).then((res) => {
+      let dateList: any = {};
+      let dots: any = [{}];
+      res?.forEach((d: any) => {
+        let date = d.date.split("T")[0];
+        d.data.moodLog.forEach((m: any) => {
+          const dot = {
+            key: m.color,
+            color: m.color,
+          };
+          if (
+            !dots.some((d: any) => d.key === dot.key && d.color === dot.color)
+          ) {
+            dots.push(dot);
+          }
+        });
         dateList[date] = {
           marked: true,
           disabled: false,
           disableTouchEvent: false,
+          dots: dots,
         };
+        dots = [{}];
       });
       setHabitDaysList(dateList);
     });
@@ -41,6 +59,7 @@ export default function HabitLog({ route, navigation }: Props) {
   return (
     <View>
       <CalendarList
+        markingType="multi-dot"
         pastScrollRange={3}
         futureScrollRange={3}
         disabledByDefault

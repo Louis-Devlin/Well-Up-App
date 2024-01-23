@@ -219,13 +219,13 @@ export class ApiCall {
   ): Promise<any> {
     let totals: MoodTotals = new MoodTotals();
     console.log(
-      `http://localhost:5239/api/MoodLog/totals/${userId}/${encodeURIComponent(
+      `https://well-up-api-kurpegc27a-nw.a.run.app/api/MoodLog/totals/${userId}/${encodeURIComponent(
         date
       )}`
     );
     await axios
       .get(
-        `http://localhost:5239/api/MoodLog/totals/${userId}/${encodeURIComponent(
+        `https://well-up-api-kurpegc27a-nw.a.run.app/api/MoodLog/totals/${userId}/${encodeURIComponent(
           date
         )}`
       )
@@ -233,5 +233,12 @@ export class ApiCall {
         totals = response.data;
       });
     return totals;
+  }
+  static async GetAllLoggedData(userId: number): Promise<any> {
+    let response: any;
+    await axios.get(`http://localhost:5239/User/${userId}`).then((res) => {
+      response = res.data;
+    });
+    return response;
   }
 }
