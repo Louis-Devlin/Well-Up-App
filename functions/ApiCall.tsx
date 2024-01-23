@@ -19,7 +19,7 @@ export class ApiCall {
     });
     await axios
       .post(
-        "http://localhost:5239/api/MoodLog",
+        "https://well-up-api-kurpegc27a-nw.a.run.app//api/MoodLog",
         {
           userId: userId,
           moodId: moodId,
@@ -43,24 +43,26 @@ export class ApiCall {
   }
   static async getMoodTotals(userId: number): Promise<MoodTotals> {
     let totals = new MoodTotals();
-    await axios.get(`http://localhost:5239/User/${userId}`).then((response) => {
-      response.data?.forEach((mood: any) => {
-        switch (mood.color) {
-          case "red":
-            totals.red++;
-            break;
-          case "blue":
-            totals.blue++;
-            break;
-          case "yellow":
-            totals.yellow++;
-            break;
-          case "green":
-            totals.green++;
-            break;
-        }
+    await axios
+      .get(`https://well-up-api-kurpegc27a-nw.a.run.app//User/${userId}`)
+      .then((response) => {
+        response.data?.forEach((mood: any) => {
+          switch (mood.color) {
+            case "red":
+              totals.red++;
+              break;
+            case "blue":
+              totals.blue++;
+              break;
+            case "yellow":
+              totals.yellow++;
+              break;
+            case "green":
+              totals.green++;
+              break;
+          }
+        });
       });
-    });
     return totals;
   }
 
@@ -80,7 +82,7 @@ export class ApiCall {
       active: active,
     };
     const call = await axios
-      .get(`http://localhost:5239/api/UserHabit`, {
+      .get(`https://well-up-api-kurpegc27a-nw.a.run.app//api/UserHabit`, {
         params,
       })
       .then((res) => {
@@ -92,7 +94,9 @@ export class ApiCall {
   static async getAllLoggedHabits(userId: number): Promise<HabitLogResponse[]> {
     let habitList: HabitLogResponse[] = [];
     await axios
-      .get(`http://localhost:5239/api/HabitLog/${userId}`)
+      .get(
+        `https://well-up-api-kurpegc27a-nw.a.run.app//api/HabitLog/${userId}`
+      )
       .then((response) => {
         habitList = response.data.map((item: any) => ({
           ...item,
@@ -107,7 +111,7 @@ export class ApiCall {
     const response = new ApiResponse();
     axios
       .post(
-        "http://localhost:5239/api/HabitLog",
+        "https://well-up-api-kurpegc27a-nw.a.run.app//api/HabitLog",
         {
           userId: userId,
           habitId: habbitId,
@@ -129,10 +133,12 @@ export class ApiCall {
   }
   static async GetHabits(): Promise<Habit[]> {
     let habits: Habit[] = [];
-    await axios.get("http://localhost:5239/api/Habit").then((res) => {
-      habits = res.data;
-      console.log(`Response : ${res.data}`);
-    });
+    await axios
+      .get("https://well-up-api-kurpegc27a-nw.a.run.app//api/Habit")
+      .then((res) => {
+        habits = res.data;
+        console.log(`Response : ${res.data}`);
+      });
     return habits;
   }
 
@@ -141,7 +147,10 @@ export class ApiCall {
   ): Promise<ApiResponse> {
     let response = new ApiResponse();
     await axios
-      .post("http://localhost:5239/api/UserHabit", trackHabit)
+      .post(
+        "https://well-up-api-kurpegc27a-nw.a.run.app//api/UserHabit",
+        trackHabit
+      )
       .then((res) => {
         response = res.data;
         response.success = true;
@@ -158,7 +167,7 @@ export class ApiCall {
     };
     axios
       .put(
-        `http://localhost:5239/api/UserHabit?userId=${userId}&habitId=${habitId}`,
+        `https://well-up-api-kurpegc27a-nw.a.run.app//api/UserHabit?userId=${userId}&habitId=${habitId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -182,7 +191,9 @@ export class ApiCall {
   static async GetWeeklyMoodTotal(userId: number): Promise<MoodTotals> {
     let totals: MoodTotals = new MoodTotals();
     await axios
-      .get(`http://localhost:5239/api/MoodLog/totals/${userId}`)
+      .get(
+        `https://well-up-api-kurpegc27a-nw.a.run.app//api/MoodLog/totals/${userId}`
+      )
       .then((response) => {
         totals = response.data;
       });
@@ -194,10 +205,42 @@ export class ApiCall {
   ): Promise<HabitTotalsWeekly> {
     let totals: HabitTotalsWeekly = new HabitTotalsWeekly();
     await axios
-      .get(`http://localhost:5239/api/HabitLog/totals/${userId}`)
+      .get(
+        `https://well-up-api-kurpegc27a-nw.a.run.app//api/HabitLog/totals/${userId}`
+      )
       .then((response) => {
         totals = response.data;
       });
     return totals;
+  }
+  static async GetLoggedMoodsByDate(
+    userId: number,
+    date: string
+  ): Promise<any> {
+    let totals: MoodTotals = new MoodTotals();
+    console.log(
+      `https://well-up-api-kurpegc27a-nw.a.run.app/api/MoodLog/totals/${userId}/${encodeURIComponent(
+        date
+      )}`
+    );
+    await axios
+      .get(
+        `https://well-up-api-kurpegc27a-nw.a.run.app/api/MoodLog/totals/${userId}/${encodeURIComponent(
+          date
+        )}`
+      )
+      .then((response) => {
+        totals = response.data;
+      });
+    return totals;
+  }
+  static async GetAllLoggedData(userId: number): Promise<any> {
+    let response: any;
+    await axios
+      .get(`https://well-up-api-kurpegc27a-nw.a.run.app/User/${userId}`)
+      .then((res) => {
+        response = res.data;
+      });
+    return response;
   }
 }

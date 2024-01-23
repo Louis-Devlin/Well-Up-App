@@ -1,61 +1,25 @@
-import { Alert, Pressable, StyleSheet, View, Text } from "react-native";
-import { DataTable } from "react-native-paper";
 import React from "react";
-import { HabitTotals } from "../Types/HabitTotals";
-import { ApiCall } from "../functions/ApiCall";
+import { DataTable } from "react-native-paper";
 type ItemProps = {
-  log: HabitTotals[];
-  setLog: any;
-  onLongPressCall: any;
+  habitData: any;
 };
-export default function HabitTotalsTable({
-  log,
-  setLog,
-  onLongPressCall,
-}: ItemProps) {
+export default function HabitTotalsTable({ habitData }: ItemProps) {
+  console.log(habitData);
   return (
-    <View>
-      <DataTable>
-        <DataTable.Header>
-          <DataTable.Title>Habit</DataTable.Title>
-          <DataTable.Title>Count</DataTable.Title>
-          <DataTable.Title>Add</DataTable.Title>
-        </DataTable.Header>
-        {log?.slice(0, log.length).map((item: HabitTotals, index: number) => (
-          <Pressable onLongPress={() => onLongPressCall(item)}>
-            <DataTable.Row style={styles.row} key={item.habitId}>
-              <DataTable.Cell>
-                <Text style={styles.text}>{item.habitName}</Text>
-              </DataTable.Cell>
-              <DataTable.Cell style={{ justifyContent: "flex-end" }}>
-                <Text style={styles.text}>{item.count}</Text>
-              </DataTable.Cell>
-              <DataTable.Cell
-                style={{ justifyContent: "flex-end" }}
-                onPress={async () => {
-                  await ApiCall.LogHabit(0, item.habitId, new Date()).then(
-                    () => {
-                      let current = [...log];
-                      current[index].count++;
-                      setLog(current);
-                    }
-                  );
-                }}
-              >
-                <Text style={styles.text}>+</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-          </Pressable>
-        ))}
-      </DataTable>
-    </View>
+    <DataTable>
+      <DataTable.Header>
+        <DataTable.Title>Habit</DataTable.Title>
+        <DataTable.Title>Count</DataTable.Title>
+      </DataTable.Header>
+      {console.log(habitData)}
+      {habitData?.map((item: any, index: number) => {
+        return (
+          <DataTable.Row key={index}>
+            <DataTable.Cell>{item.habitName}</DataTable.Cell>
+            <DataTable.Cell>{item.count}</DataTable.Cell>
+          </DataTable.Row>
+        );
+      })}
+    </DataTable>
   );
 }
-const styles = StyleSheet.create({
-  text: {
-    fontSize: 23,
-  },
-  row: {
-    height: 90,
-  },
-});

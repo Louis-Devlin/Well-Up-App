@@ -4,7 +4,7 @@ import { View, StyleSheet, Alert } from "react-native";
 import { ApiCall } from "../functions/ApiCall";
 import Icon from "react-native-vector-icons/AntDesign";
 import { HabitTotals } from "../Types/HabitTotals";
-import HabitTotalsTable from "../componenets/HabitTotalsTable";
+import HabitTotalsTable from "../componenets/HabitLogTotalsTable";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useFocusEffect } from "@react-navigation/native";
 type Props = NativeStackScreenProps<RootStackParamList, "AddHabit">;
