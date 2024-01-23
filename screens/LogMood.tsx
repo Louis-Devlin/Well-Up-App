@@ -19,6 +19,7 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import MoodTotal from "../componenets/MoodTotal";
 import { MoodTotals } from "../Types/MoodTotals";
 import { ApiCall } from "../functions/ApiCall";
+import DissmissableArea from "../componenets/DissmissableArea";
 type Props = NativeStackScreenProps<RootStackParamList, "MoodLogResult">;
 export default function LogMood({ route, navigation }: Props) {
   const [text, setText] = useState("");
@@ -54,45 +55,47 @@ export default function LogMood({ route, navigation }: Props) {
     ApiCall.getMoodTotals(0).then((response) => setTotals(response));
   }, []);
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>What did you do today?</Text>
-      <TextInput
-        multiline={true}
-        numberOfLines={4}
-        style={styles.input}
-        value={text}
-        onChangeText={setText}
-      />
-      <Button
-        onPress={() => {
-          fetchMoods(text);
-        }}
-        title="Predict Mood"
-        color="#841584"
-        accessibilityLabel="Predict Mood"
-      />
-      <Text>{"\n"}</Text>
-      <FlatList
-        scrollEnabled={false}
-        data={moods ?? null}
-        ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
-        renderItem={({ item, index }) => {
-          return (
-            <MoodItem
-              id={item.moodId}
-              name={item.moodName}
-              posX={item.positionX}
-              posY={item.positionY}
-              colour={item.colour}
-              navigation={navigation}
-              setTotals={setTotals}
-              index={index}
-            />
-          );
-        }}
-      />
-      <MoodTotal totals={totals} />
-    </View>
+    <DissmissableArea>
+      <View style={styles.container}>
+        <Text style={styles.heading}>What did you do today?</Text>
+        <TextInput
+          multiline={true}
+          numberOfLines={4}
+          style={styles.input}
+          value={text}
+          onChangeText={setText}
+        />
+        <Button
+          onPress={() => {
+            fetchMoods(text);
+          }}
+          title="Predict Mood"
+          color="#841584"
+          accessibilityLabel="Predict Mood"
+        />
+        <Text>{"\n"}</Text>
+        <FlatList
+          scrollEnabled={false}
+          data={moods ?? null}
+          ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
+          renderItem={({ item, index }) => {
+            return (
+              <MoodItem
+                id={item.moodId}
+                name={item.moodName}
+                posX={item.positionX}
+                posY={item.positionY}
+                colour={item.colour}
+                navigation={navigation}
+                setTotals={setTotals}
+                index={index}
+              />
+            );
+          }}
+        />
+        <MoodTotal totals={totals} />
+      </View>
+    </DissmissableArea>
   );
 }
 const styles = StyleSheet.create({
