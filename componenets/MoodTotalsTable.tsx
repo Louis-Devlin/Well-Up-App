@@ -5,21 +5,20 @@ type ItemProps = {
 };
 
 export default function MoodTotalsTable({ moodData }: ItemProps) {
-    const getEmojiByColor = (color: string) => {
-        switch(color){
-            case "red":
-                return "😠"
-            case "blue":
-                return "😞 😴"
-            case "green":
-                return "😄 😴"
-            case "yellow":
-                return "😁"
-            default:
-                return "😞 😴"
-        }
-
+  const getEmojiByColor = (color: string) => {
+    switch (color) {
+      case "red":
+        return "😠";
+      case "blue":
+        return "😞 😴";
+      case "green":
+        return "😄 😴";
+      case "yellow":
+        return "😁";
+      default:
+        return "❓";
     }
+  };
   return (
     <DataTable>
       <DataTable.Header>
@@ -28,7 +27,7 @@ export default function MoodTotalsTable({ moodData }: ItemProps) {
         <DataTable.Title>Mood Group</DataTable.Title>
       </DataTable.Header>
       {moodData?.map((item: any, index: number) => {
-        const emoji = getEmojiByColor(item.colour)
+        const emoji = getEmojiByColor(item.colour);
         return (
           <DataTable.Row key={index}>
             <DataTable.Cell>{item.moodName}</DataTable.Cell>
