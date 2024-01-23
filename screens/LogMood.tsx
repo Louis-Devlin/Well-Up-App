@@ -16,7 +16,6 @@ type RootStackParamList = {
   MoodLogResult: undefined;
 };
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import MoodTotal from "../componenets/MoodTotal";
 import { MoodTotals } from "../Types/MoodTotals";
 import { ApiCall } from "../functions/ApiCall";
 import DissmissableArea from "../componenets/DissmissableArea";
@@ -36,13 +35,13 @@ export default function LogMood({ route, navigation }: Props) {
   const fetchMoods = async (text: string) => {
     try {
       const sentimentResponse = await axios.get(
-        `http://localhost:5239/api/Sentiment/sentimentprediction?sentimentText=${encodeURI(
+        `https://well-up-api-kurpegc27a-nw.a.run.app/api/Sentiment/sentimentprediction?sentimentText=${encodeURI(
           text
         )}`
       );
 
       const moodsResponse = await axios.get(
-        `http://localhost:5239/api/Moods/${sentimentResponse.data}`
+        `https://well-up-api-kurpegc27a-nw.a.run.app/api/Moods/${sentimentResponse.data}`
       );
 
       setMoods(moodsResponse.data);
@@ -93,7 +92,6 @@ export default function LogMood({ route, navigation }: Props) {
             );
           }}
         />
-        <MoodTotal totals={totals} />
       </View>
     </DissmissableArea>
   );
