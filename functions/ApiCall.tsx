@@ -255,4 +255,15 @@ export class ApiCall {
       });
     return id;
   }
+  static async Register(name: string, email: string, password: string){
+    let userId:number = -1
+    await axios.post("https://well-up-api-kurpegc27a-nw.a.run.app/api/User", {
+      name: name,
+      email: email,
+      password: password,
+    }).then((res) => {
+      userId = res.data;
+    })
+    return userId;
+  }
 }

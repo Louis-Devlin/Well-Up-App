@@ -7,4 +7,5 @@ export type RootStackParamList = {
   HabitLog: { habitLog: any };
   PastLogs: { data: any };
   Login: undefined;
+  Register: undefined;
 };

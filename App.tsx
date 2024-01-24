@@ -11,6 +11,7 @@ import HabitLog from "./screens/HabitLog";
 import PastDays from "./screens/PastDays";
 import Login from "./screens/Login";
 import { UserContext } from "./Types/UserContext";
+import Register from "./screens/Register";
 export default function App() {
   const [user, setUser] = useState(null);
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -19,6 +20,7 @@ export default function App() {
       <UserContext.Provider value={{ user, setUser }}>
         <Stack.Navigator initialRouteName="Login">
           <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="MoodLog" component={LogMood} />
           <Stack.Screen name="HabitTrack" component={HabbitTrack} />
