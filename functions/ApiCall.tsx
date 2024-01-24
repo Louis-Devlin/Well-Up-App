@@ -19,7 +19,7 @@ export class ApiCall {
     });
     await axios
       .post(
-        "https://well-up-api-kurpegc27a-nw.a.run.app//api/MoodLog",
+        "https://well-up-api-kurpegc27a-nw.a.run.app/api/MoodLog",
         {
           userId: userId,
           moodId: moodId,
@@ -44,7 +44,7 @@ export class ApiCall {
   static async getMoodTotals(userId: number): Promise<MoodTotals> {
     let totals = new MoodTotals();
     await axios
-      .get(`https://well-up-api-kurpegc27a-nw.a.run.app//User/${userId}`)
+      .get(`https://well-up-api-kurpegc27a-nw.a.run.app/User/${userId}`)
       .then((response) => {
         response.data?.forEach((mood: any) => {
           switch (mood.color) {
@@ -82,7 +82,7 @@ export class ApiCall {
       active: active,
     };
     const call = await axios
-      .get(`https://well-up-api-kurpegc27a-nw.a.run.app//api/UserHabit`, {
+      .get(`https://well-up-api-kurpegc27a-nw.a.run.app/api/UserHabit`, {
         params,
       })
       .then((res) => {
@@ -94,9 +94,7 @@ export class ApiCall {
   static async getAllLoggedHabits(userId: number): Promise<HabitLogResponse[]> {
     let habitList: HabitLogResponse[] = [];
     await axios
-      .get(
-        `https://well-up-api-kurpegc27a-nw.a.run.app//api/HabitLog/${userId}`
-      )
+      .get(`https://well-up-api-kurpegc27a-nw.a.run.app/api/HabitLog/${userId}`)
       .then((response) => {
         habitList = response.data.map((item: any) => ({
           ...item,
@@ -111,7 +109,7 @@ export class ApiCall {
     const response = new ApiResponse();
     axios
       .post(
-        "https://well-up-api-kurpegc27a-nw.a.run.app//api/HabitLog",
+        "https://well-up-api-kurpegc27a-nw.a.run.app/api/HabitLog",
         {
           userId: userId,
           habitId: habbitId,
@@ -134,7 +132,7 @@ export class ApiCall {
   static async GetHabits(): Promise<Habit[]> {
     let habits: Habit[] = [];
     await axios
-      .get("https://well-up-api-kurpegc27a-nw.a.run.app//api/Habit")
+      .get("https://well-up-api-kurpegc27a-nw.a.run.app/api/Habit")
       .then((res) => {
         habits = res.data;
         console.log(`Response : ${res.data}`);
@@ -148,7 +146,7 @@ export class ApiCall {
     let response = new ApiResponse();
     await axios
       .post(
-        "https://well-up-api-kurpegc27a-nw.a.run.app//api/UserHabit",
+        "https://well-up-api-kurpegc27a-nw.a.run.app/api/UserHabit",
         trackHabit
       )
       .then((res) => {
@@ -167,7 +165,7 @@ export class ApiCall {
     };
     axios
       .put(
-        `https://well-up-api-kurpegc27a-nw.a.run.app//api/UserHabit?userId=${userId}&habitId=${habitId}`,
+        `https://well-up-api-kurpegc27a-nw.a.run.app/api/UserHabit?userId=${userId}&habitId=${habitId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -192,7 +190,7 @@ export class ApiCall {
     let totals: MoodTotals = new MoodTotals();
     await axios
       .get(
-        `https://well-up-api-kurpegc27a-nw.a.run.app//api/MoodLog/totals/${userId}`
+        `https://well-up-api-kurpegc27a-nw.a.run.app/api/MoodLog/totals/${userId}`
       )
       .then((response) => {
         totals = response.data;
@@ -206,7 +204,7 @@ export class ApiCall {
     let totals: HabitTotalsWeekly = new HabitTotalsWeekly();
     await axios
       .get(
-        `https://well-up-api-kurpegc27a-nw.a.run.app//api/HabitLog/totals/${userId}`
+        `https://well-up-api-kurpegc27a-nw.a.run.app/api/HabitLog/totals/${userId}`
       )
       .then((response) => {
         totals = response.data;
@@ -242,5 +240,19 @@ export class ApiCall {
         response = res.data;
       });
     return response;
+  }
+
+  static async Login(email: string, password: string): Promise<any> {
+    let id: number = -1;
+    await axios
+      .post("https://well-up-api-kurpegc27a-nw.a.run.app/api/User/login", {
+        email: email,
+        password: password,
+      })
+      .then((res) => {
+        console.log(`response from login: ${res.data}`);
+        id = res.data;
+      });
+    return id;
   }
 }

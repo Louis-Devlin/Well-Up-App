@@ -6,4 +6,5 @@ export type RootStackParamList = {
   AddHabit: { userHabits: number[] };
   HabitLog: { habitLog: any };
   PastLogs: { data: any };
+  Login: undefined;
 };
