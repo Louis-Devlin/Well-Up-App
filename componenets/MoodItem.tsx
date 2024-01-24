@@ -1,9 +1,9 @@
 import { View, Pressable, Text, Alert, StyleSheet } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import getBackgroundStyle from "../functions/Styles";
 import { ApiCall } from "../functions/ApiCall";
 import { ApiResponse } from "../Types/ApiResponse";
-
+import { UserContext } from "../Types/UserContext";
 type ItemProps = {
   id: number;
   name: string;
@@ -13,6 +13,7 @@ type ItemProps = {
   colour: string;
   setTotals: any;
   index: number;
+  energyText: string;
 };
 const getTextStyle = (posX: number, posY: number) => {
   if (posX < 5 && posY >= 5) {
@@ -32,7 +33,9 @@ export default function MoodItem({
   colour,
   setTotals,
   index,
+  energyText,
 }: ItemProps) {
+  const { user, setUser } = useContext(UserContext);
   return (
     <View>
       <Pressable
@@ -42,7 +45,7 @@ export default function MoodItem({
               text: "Submit",
               onPress: async () => {
                 let result: ApiResponse = await ApiCall.LogMood(
-                  0,
+                  user?.userId ?? -1,
                   id,
                   new Date()
                 );
@@ -69,6 +72,7 @@ export default function MoodItem({
         style={getBackgroundStyle(colour, index) as any}
       >
         <Text style={getTextStyle(posX, posY) as any}>{name}</Text>
+        <Text style={styles.center}>{energyText}</Text>
       </Pressable>
     </View>
   );
