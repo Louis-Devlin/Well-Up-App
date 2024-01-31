@@ -19,6 +19,7 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MoodTotals } from "../Types/MoodTotals";
 import { ApiCall } from "../functions/ApiCall";
 import DissmissableArea from "../componenets/DissmissableArea";
+import StepCount from "../componenets/StepCount";
 type Props = NativeStackScreenProps<RootStackParamList, "MoodLogResult">;
 export default function LogMood({ route, navigation }: Props) {
   const [text, setText] = useState("");
@@ -92,6 +93,7 @@ export default function LogMood({ route, navigation }: Props) {
             );
           }}
         />
+        <StepCount />
       </View>
     </DissmissableArea>
   );
