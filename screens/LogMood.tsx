@@ -6,7 +6,7 @@ import {
   FlatList,
   StyleSheet,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import MoodItem from "../componenets/MoodItem";
 type RootStackParamList = {
@@ -19,6 +19,7 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MoodTotals } from "../Types/MoodTotals";
 import { ApiCall } from "../functions/ApiCall";
 import DissmissableArea from "../componenets/DissmissableArea";
+import { UserContext } from "../Types/UserContext";
 type Props = NativeStackScreenProps<RootStackParamList, "MoodLogResult">;
 export default function LogMood({ route, navigation }: Props) {
   const [text, setText] = useState("");
@@ -29,7 +30,7 @@ export default function LogMood({ route, navigation }: Props) {
     positionY: number;
     colour: string;
   };
-
+  const { user, setUser } = useContext(UserContext);
   const [totals, setTotals] = useState<MoodTotals>(new MoodTotals());
   const [moods, setMoods] = useState<Mood[] | null>();
   const fetchMoods = async (text: string) => {
@@ -51,7 +52,9 @@ export default function LogMood({ route, navigation }: Props) {
     }
   };
   useEffect(() => {
-    ApiCall.getMoodTotals(0).then((response) => setTotals(response));
+    ApiCall.getMoodTotals(user?.userId || -1).then((response) =>
+      setTotals(response)
+    );
   }, []);
   return (
     <DissmissableArea>
@@ -78,6 +81,12 @@ export default function LogMood({ route, navigation }: Props) {
           data={moods ?? null}
           ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
           renderItem={({ item, index }) => {
+            let energyText = "";
+            if (index == 0) {
+              energyText = "(High Energy)";
+            } else if (index == 9) {
+              energyText = "(Low Energy)";
+            }
             return (
               <MoodItem
                 id={item.moodId}
@@ -88,6 +97,7 @@ export default function LogMood({ route, navigation }: Props) {
                 navigation={navigation}
                 setTotals={setTotals}
                 index={index}
+                energyText={energyText}
               />
             );
           }}
