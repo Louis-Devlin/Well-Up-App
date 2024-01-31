@@ -1,8 +1,9 @@
 import { Alert, Pressable, StyleSheet, View, Text } from "react-native";
 import { DataTable } from "react-native-paper";
-import React from "react";
+import React, { useContext } from "react";
 import { HabitTotals } from "../Types/HabitTotals";
 import { ApiCall } from "../functions/ApiCall";
+import { UserContext } from "../Types/UserContext";
 type ItemProps = {
   log: HabitTotals[];
   setLog: any;
@@ -13,6 +14,7 @@ export default function HabitTotalsTable({
   setLog,
   onLongPressCall,
 }: ItemProps) {
+  const { user, setUser } = useContext(UserContext);
   return (
     <View>
       <DataTable>
@@ -33,13 +35,15 @@ export default function HabitTotalsTable({
               <DataTable.Cell
                 style={{ justifyContent: "flex-end" }}
                 onPress={async () => {
-                  await ApiCall.LogHabit(0, item.habitId, new Date()).then(
-                    () => {
-                      let current = [...log];
-                      current[index].count++;
-                      setLog(current);
-                    }
-                  );
+                  await ApiCall.LogHabit(
+                    user?.userId || -1,
+                    item.habitId,
+                    new Date()
+                  ).then(() => {
+                    let current = [...log];
+                    current[index].count++;
+                    setLog(current);
+                  });
                 }}
               >
                 <Text style={styles.text}>+</Text>

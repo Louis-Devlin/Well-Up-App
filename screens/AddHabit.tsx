@@ -1,5 +1,5 @@
 import { View, Text, Button, Alert, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { ApiCall } from "../functions/ApiCall";
 import { Habit } from "../Types/Habit";
 import Icon from "react-native-vector-icons/AntDesign";
@@ -7,8 +7,10 @@ import EntypoIcon from "react-native-vector-icons/Entypo";
 import { UserHabitRequest } from "../Types/UserHabitRequest";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Types/RootStackParamList";
+import { UserContext } from "../Types/UserContext";
 type Props = NativeStackScreenProps<RootStackParamList, "AddHabit">;
 export default function AddHabit({ route, navigation }: Props) {
+  const { user, setUser } = useContext(UserContext);
   const [habits, setHabits] = useState<Habit[]>();
   console.log(route.params);
   const { userHabits } = route.params;
@@ -43,7 +45,7 @@ export default function AddHabit({ route, navigation }: Props) {
               text: "Yes",
               onPress: () => {
                 let request: UserHabitRequest = {
-                  userId: 0,
+                  userId: user?.userId || -1,
                   habitId: habitId,
                   habitName: "",
                 };
@@ -80,7 +82,7 @@ export default function AddHabit({ route, navigation }: Props) {
               text: "Submit",
               onPress: (habitName: any) => {
                 let request: UserHabitRequest = {
-                  userId: 0,
+                  userId: user?.userId || -1,
                   habitId: -1,
                   habitName: habitName,
                 };
@@ -104,7 +106,12 @@ export default function AddHabit({ route, navigation }: Props) {
   };
   return (
     <View>
-      <Icon.Button size={20} name="question" onPress={addNew} style={styles.habitNotHereButton}>
+      <Icon.Button
+        size={20}
+        name="question"
+        onPress={addNew}
+        style={styles.habitNotHereButton}
+      >
         Habit not here
       </Icon.Button>
       <Text style={styles.availableHabitsText}>Avaialble Habits</Text>
@@ -125,17 +132,17 @@ export default function AddHabit({ route, navigation }: Props) {
 }
 const styles = StyleSheet.create({
   habitNotHereButton: {
-    flexDirection: 'row', // Ensure the icon and text are in the same row
-    
+    flexDirection: "row", // Ensure the icon and text are in the same row
+
     margin: 10,
   },
   buttonText: {
-    marginLeft: 5, 
+    marginLeft: 5,
   },
   availableHabitsText: {
     fontSize: 24,
-    textAlign: 'center',
-    marginTop: 10, 
+    textAlign: "center",
+    marginTop: 10,
   },
   container: {
     padding: 5,

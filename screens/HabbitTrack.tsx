@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useContext } from "react";
 import { RootStackParamList } from "../Types/RootStackParamList";
 import { View, StyleSheet, Alert } from "react-native";
 import { ApiCall } from "../functions/ApiCall";
@@ -7,17 +7,21 @@ import { HabitTotals } from "../Types/HabitTotals";
 import HabitTotalsTable from "../componenets/HabitLogTotalsTable";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useFocusEffect } from "@react-navigation/native";
+import { UserContext } from "../Types/UserContext";
 type Props = NativeStackScreenProps<RootStackParamList, "AddHabit">;
 
 export default function HabbitTrack({ route, navigation }: Props) {
+  const { user, setUser } = useContext(UserContext);
   const [log, setLog] = useState<HabitTotals[]>([]);
   const updateTotals = () => {
-    ApiCall.getLoggedHabitsByDate(0, new Date().toISOString(), true).then(
-      (response) => {
-        console.log(response.responseData.data);
-        setLog(response.responseData.data);
-      }
-    );
+    ApiCall.getLoggedHabitsByDate(
+      user?.userId || -1,
+      new Date().toISOString(),
+      true
+    ).then((response) => {
+      console.log(response.responseData.data);
+      setLog(response.responseData.data);
+    });
   };
   const onLongPressCall = (item: HabitTotals) => {
     Alert.alert(
@@ -31,9 +35,11 @@ export default function HabbitTrack({ route, navigation }: Props) {
         {
           text: "Yes",
           onPress: () => {
-            ApiCall.StopTrackingHabit(0, item.habitId).then(() => {
-              updateTotals();
-            });
+            ApiCall.StopTrackingHabit(user?.userId || -1, item.habitId).then(
+              () => {
+                updateTotals();
+              }
+            );
           },
         },
       ]

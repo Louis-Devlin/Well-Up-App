@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Pressable } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Types/RootStackParamList";
 import { PieChart } from "react-native-chart-kit";
@@ -10,20 +10,24 @@ import WeeklyHabitChart from "../componenets/WeeklyHabitChart";
 import Icon from "react-native-vector-icons/AntDesign";
 import { AbstractChartConfig } from "react-native-chart-kit/dist/AbstractChart";
 import WeeklyMoodChart from "../componenets/WeeklyMoodChart";
+import { UserContext } from "../Types/UserContext";
 type Props = NativeStackScreenProps<RootStackParamList, "MoodLog">;
 export default function Home({ route, navigation }: Props) {
-  const [moodTotals, setMoodTotals] = useState<MoodTotals>();
+  const { user, setUser } = useContext(UserContext);
+  const [moodTotals, setMoodTotals] = useState<MoodTotals>(new MoodTotals());
   const [habitTotals, setHabitTotals] = useState<HabitTotalsWeekly>(
     new HabitTotalsWeekly()
   );
 
   const getWeeklyMoodTotals = async () => {
-    await ApiCall.GetWeeklyMoodTotal(0).then((response: MoodTotals) => {
-      setMoodTotals(response);
-    });
+    await ApiCall.GetWeeklyMoodTotal(user?.userId || -1).then(
+      (response: MoodTotals) => {
+        setMoodTotals(response);
+      }
+    );
   };
   const getWeeklyHabiitTotals = async () => {
-    await ApiCall.GetWeeklyHabitTotals(0).then(
+    await ApiCall.GetWeeklyHabitTotals(user?.userId || -1).then(
       (response: HabitTotalsWeekly) => {
         setHabitTotals(response);
       }
