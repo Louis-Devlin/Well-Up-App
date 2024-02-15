@@ -43,7 +43,12 @@ export default function Login({ route, navigation }: Props) {
           />
         </View>
         <View style={styles.buttonContainer}>
-          <Button mode="contained" onPress={() => navigation.navigate("Register")}>Register</Button>
+          <Button
+            mode="contained"
+            onPress={() => navigation.navigate("Register")}
+          >
+            Register
+          </Button>
           <Button mode="contained" onPress={login}>
             Login
           </Button>

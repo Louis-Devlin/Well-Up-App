@@ -11,7 +11,7 @@ type ItemProps = {
   posY: number;
   navigation: any;
   colour: string;
-  setTotals: any;
+
   index: number;
   energyText: string;
 };
@@ -31,7 +31,7 @@ export default function MoodItem({
   posY,
   navigation,
   colour,
-  setTotals,
+
   index,
   energyText,
 }: ItemProps) {
@@ -50,12 +50,6 @@ export default function MoodItem({
                   new Date()
                 );
                 if (result.success) {
-                  setTotals((prevTotals: any) => {
-                    return {
-                      ...prevTotals,
-                      [colour]: (prevTotals[colour] += 1),
-                    };
-                  });
                   navigation.navigate("MoodLogResult");
                 }
                 // Error Here

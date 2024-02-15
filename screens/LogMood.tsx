@@ -19,7 +19,11 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MoodTotals } from "../Types/MoodTotals";
 import { ApiCall } from "../functions/ApiCall";
 import DissmissableArea from "../componenets/DissmissableArea";
+import StepCount from "../componenets/StepCount";
 import { UserContext } from "../Types/UserContext";
+import { HealthDataContext } from "../Types/HealthDataContext";
+import HealthData from "../HealthData/interfaces/HealthData";
+import TYPES from "../HealthData/Types/DITypes";
 type Props = NativeStackScreenProps<RootStackParamList, "MoodLogResult">;
 export default function LogMood({ route, navigation }: Props) {
   const [text, setText] = useState("");
@@ -31,9 +35,16 @@ export default function LogMood({ route, navigation }: Props) {
     colour: string;
   };
   const { user, setUser } = useContext(UserContext);
-  const [totals, setTotals] = useState<MoodTotals>(new MoodTotals());
+
   const [moods, setMoods] = useState<Mood[] | null>();
+  const healthDataContext = useContext(HealthDataContext);
+  const healthData = healthDataContext?.get<HealthData>(TYPES.HealthData);
+  const [sleepHours, setSleepHours] = useState(0);
+  const [filteredMoods, setFilteredMoods] = useState<Mood[] | null>();
+  const [showAll, setShowAll] = useState(false);
   const fetchMoods = async (text: string) => {
+    setMoods([]);
+    setFilteredMoods([]);
     try {
       const sentimentResponse = await axios.get(
         `https://well-up-api-kurpegc27a-nw.a.run.app/api/Sentiment/sentimentprediction?sentimentText=${encodeURI(
@@ -46,15 +57,44 @@ export default function LogMood({ route, navigation }: Props) {
       );
 
       setMoods(moodsResponse.data);
-      console.log("Moods data:", moodsResponse.data);
+      const baseList = [...moodsResponse.data];
+      const filteredMoods = [];
+      if (moodsResponse.data.length > 0) {
+        if (moodsResponse.data[0].colour === "red") {
+          baseList.reverse();
+        }
+        if (sleepHours === 0) {
+          baseList.push(...baseList.slice(0, 3));
+        } else if (sleepHours === 9) {
+          baseList.push(...baseList.slice(7, 10));
+        } else {
+          if (sleepHours - 1 >= 0 && sleepHours - 1 < baseList.length) {
+            filteredMoods.push(baseList[sleepHours - 1]);
+          }
+          if (sleepHours >= 0 && sleepHours < baseList.length) {
+            filteredMoods.push(baseList[sleepHours]);
+          }
+          if (sleepHours + 1 >= 0 && sleepHours + 1 < baseList.length) {
+            filteredMoods.push(baseList[sleepHours + 1]);
+          }
+        }
+      }
+      console.log("Moods", moods);
+      setFilteredMoods(filteredMoods);
+      console.log("Filtered Moods", filteredMoods.length);
     } catch (error) {
       console.error("Error fetching moods:", error);
     }
   };
   useEffect(() => {
-    ApiCall.getMoodTotals(user?.userId || -1).then((response) =>
-      setTotals(response)
-    );
+    if (healthData) {
+      healthData.init().then(() => {
+        healthData.getSleepData(new Date()).then((sleepData: any) => {
+          console.log(`Setting Sleep Hours ${Math.round(sleepData)}`);
+          setSleepHours(Math.round(sleepData));
+        });
+      });
+    }
   }, []);
   return (
     <DissmissableArea>
@@ -77,8 +117,8 @@ export default function LogMood({ route, navigation }: Props) {
         />
         <Text>{"\n"}</Text>
         <FlatList
-          scrollEnabled={false}
-          data={moods ?? null}
+          scrollEnabled={true}
+          data={filteredMoods?.length === 0 || showAll ? moods : filteredMoods}
           ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
           renderItem={({ item, index }) => {
             let energyText = "";
@@ -95,13 +135,18 @@ export default function LogMood({ route, navigation }: Props) {
                 posY={item.positionY}
                 colour={item.colour}
                 navigation={navigation}
-                setTotals={setTotals}
                 index={index}
                 energyText={energyText}
               />
             );
           }}
         />
+        {filteredMoods?.length > 0 ? (
+          <Button
+            title={showAll ? "Show Filtered Moods" : "Show All Moods"}
+            onPress={() => setShowAll(!showAll)}
+          />
+        ) : null}
       </View>
     </DissmissableArea>
   );
