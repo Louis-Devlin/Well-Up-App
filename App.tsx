@@ -22,9 +22,9 @@ import { HealthDataContext } from "./Types/HealthDataContext";
 
 export default function App() {
   const container = new Container();
-  if (Platform.OS === "ios") {
-    container.bind<HealthData>(TYPES.HealthData).to(AppleHealth);
-  }
+if(Platform.OS === "ios"){
+  container.bind<HealthData>(TYPES.HealthData).to(AppleHealth);
+}
   const [user, setUser] = useState(null);
   const Stack = createNativeStackNavigator<RootStackParamList>();
   return (

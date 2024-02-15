@@ -10,6 +10,7 @@ export default function StepCount() {
   const healthData = context?.get<HealthData>(TYPES.HealthData);
 
   const [steps, setSteps] = useState(0);
+  const [heartRate, setHeartRate] = useState(0);
 
   useEffect(() => {
     if (healthData) {
@@ -17,25 +18,39 @@ export default function StepCount() {
         .init()
         .then(() => {
           console.log("Health Data Initialized");
-          // Assuming getSteps is asynchronous
           healthData
             .getSteps(new Date())
             .then((steps) => {
+              console.log("Steps: ", steps);
               setSteps(steps);
             })
             .catch((err) => {
               console.error(err);
             });
+          healthData
+            .getHeartRate(new Date(new Date().getDate() - 1))
+            .then((heartRate) => {
+              console.log("Heart Rate: ", heartRate);
+              setHeartRate(heartRate);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+          healthData.getSleepData(new Date()).then((sleepData) => {
+            console.log("Got a response");
+            console.log("Sleep Data: ", sleepData);
+          });
         })
         .catch((err) => {
           console.error(err);
         });
     }
-  }, [context, healthData]);
+  }, []);
 
   return (
     <View>
       <Text>Step Count : {steps}</Text>
+      <Text>Heart Rate : {heartRate}</Text>
     </View>
   );
 }
