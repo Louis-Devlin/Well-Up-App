@@ -12,19 +12,19 @@ import PastDays from "./screens/PastDays";
 import Login from "./screens/Login";
 import { UserContext } from "./Types/UserContext";
 import Register from "./screens/Register";
-import HealthDataProvider from "./componenets/HealthDataProvider";
+
 import { Container } from "inversify";
 import HealthData from "./HealthData/interfaces/HealthData";
 import TYPES from "./HealthData/Types/DITypes";
 import AppleHealth from "./HealthData/Types/AppleHealth";
 import { Platform } from "react-native";
 import { HealthDataContext } from "./Types/HealthDataContext";
-
+import Suggestions from "./screens/Suggestions";
 export default function App() {
   const container = new Container();
-if(Platform.OS === "ios"){
-  container.bind<HealthData>(TYPES.HealthData).to(AppleHealth);
-}
+  if (Platform.OS === "ios") {
+    container.bind<HealthData>(TYPES.HealthData).to(AppleHealth);
+  }
   const [user, setUser] = useState(null);
   const Stack = createNativeStackNavigator<RootStackParamList>();
   return (
@@ -41,6 +41,7 @@ if(Platform.OS === "ios"){
             <Stack.Screen name="AddHabit" component={AddHabit} />
             <Stack.Screen name="HabitLog" component={HabitLog} />
             <Stack.Screen name="PastLogs" component={PastDays} />
+            <Stack.Screen name="Suggestions" component={Suggestions} />
           </Stack.Navigator>
         </UserContext.Provider>
       </HealthDataContext.Provider>

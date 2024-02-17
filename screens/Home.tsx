@@ -11,7 +11,7 @@ import Icon from "react-native-vector-icons/AntDesign";
 import { AbstractChartConfig } from "react-native-chart-kit/dist/AbstractChart";
 import WeeklyMoodChart from "../componenets/WeeklyMoodChart";
 import { UserContext } from "../Types/UserContext";
-type Props = NativeStackScreenProps<RootStackParamList, "MoodLog">;
+type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 export default function Home({ route, navigation }: Props) {
   const { user, setUser } = useContext(UserContext);
   const [moodTotals, setMoodTotals] = useState<MoodTotals>(new MoodTotals());

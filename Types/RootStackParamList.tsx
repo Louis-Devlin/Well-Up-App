@@ -8,4 +8,5 @@ export type RootStackParamList = {
   PastLogs: { data: any };
   Login: undefined;
   Register: undefined;
+  Suggestions: {text: string};
 };

@@ -6,7 +6,7 @@ import { ApiCall } from "../functions/ApiCall";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Types/RootStackParamList";
 import { UserContext } from "../Types/UserContext";
-type Props = NativeStackScreenProps<RootStackParamList, "Home">;
+type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 export default function Login({ route, navigation }: Props) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");

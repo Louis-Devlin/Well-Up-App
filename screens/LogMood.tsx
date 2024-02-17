@@ -25,7 +25,7 @@ import { UserContext } from "../Types/UserContext";
 import { HealthDataContext } from "../Types/HealthDataContext";
 import HealthData from "../HealthData/interfaces/HealthData";
 import TYPES from "../HealthData/Types/DITypes";
-type Props = NativeStackScreenProps<RootStackParamList, "MoodLogResult">;
+type Props = NativeStackScreenProps<RootStackParamList, "LogMood">;
 export default function LogMood({ route, navigation }: Props) {
   const [text, setText] = useState("");
   type Mood = {
@@ -53,6 +53,7 @@ export default function LogMood({ route, navigation }: Props) {
           text
         )}`
       );
+      console.log("Sentiment Response", sentimentResponse.data);
 
       const moodsResponse = await axios.get(
         `https://well-up-api-kurpegc27a-nw.a.run.app/api/Moods?sentiment=${sentimentResponse.data}`
@@ -127,7 +128,6 @@ export default function LogMood({ route, navigation }: Props) {
           {cols.map((column, index) => (
             <FlatList
               key={index}
-
               data={column}
               ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
               contentContainerStyle={styles.listContainer} // Add this line to style the list container
@@ -162,6 +162,14 @@ export default function LogMood({ route, navigation }: Props) {
             onPress={() => setShowAll(!showAll)}
           />
         ) : null}
+        <Button
+          title="Incorrect Suggestion?"
+          onPress={() => {
+            navigation.navigate("Suggestions",{
+              text:text
+            });
+          }}
+        />
       </View>
     </DissmissableArea>
   );

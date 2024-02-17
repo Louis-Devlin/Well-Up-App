@@ -8,7 +8,7 @@ import HabitTotalsTable from "../componenets/HabitLogTotalsTable";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useFocusEffect } from "@react-navigation/native";
 import { UserContext } from "../Types/UserContext";
-type Props = NativeStackScreenProps<RootStackParamList, "AddHabit">;
+type Props = NativeStackScreenProps<RootStackParamList, "HabitTrack">;
 
 export default function HabbitTrack({ route, navigation }: Props) {
   const { user, setUser } = useContext(UserContext);
