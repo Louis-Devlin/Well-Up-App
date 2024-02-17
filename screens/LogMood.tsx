@@ -5,6 +5,7 @@ import {
   Button,
   FlatList,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
@@ -42,6 +43,7 @@ export default function LogMood({ route, navigation }: Props) {
   const [sleepHours, setSleepHours] = useState(0);
   const [filteredMoods, setFilteredMoods] = useState<Mood[] | null>();
   const [showAll, setShowAll] = useState(false);
+  const [cols, setCols] = useState<Mood[][]>([]);
   const fetchMoods = async (text: string) => {
     setMoods([]);
     setFilteredMoods([]);
@@ -53,10 +55,9 @@ export default function LogMood({ route, navigation }: Props) {
       );
 
       const moodsResponse = await axios.get(
-        `https://well-up-api-kurpegc27a-nw.a.run.app/api/Moods/${sentimentResponse.data}`
+        `https://well-up-api-kurpegc27a-nw.a.run.app/api/Moods?sentiment=${sentimentResponse.data}`
       );
 
-      setMoods(moodsResponse.data);
       const baseList = [...moodsResponse.data];
       const filteredMoods = [];
       if (moodsResponse.data.length > 0) {
@@ -79,7 +80,13 @@ export default function LogMood({ route, navigation }: Props) {
           }
         }
       }
-      console.log("Moods", moods);
+      const columns: Mood[][] = Array.from({ length: 10 }, () => []); // Create an array of 10 empty arrays
+
+      moodsResponse.data.forEach((mood: Mood) => {
+        columns[mood.positionY].push(mood); // Push each mood into its corresponding column
+      });
+      setCols(columns);
+      setMoods(moodsResponse.data);
       setFilteredMoods(filteredMoods);
       console.log("Filtered Moods", filteredMoods.length);
     } catch (error) {
@@ -116,31 +123,39 @@ export default function LogMood({ route, navigation }: Props) {
           accessibilityLabel="Predict Mood"
         />
         <Text>{"\n"}</Text>
-        <FlatList
-          scrollEnabled={true}
-          data={filteredMoods?.length === 0 || showAll ? moods : filteredMoods}
-          ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
-          renderItem={({ item, index }) => {
-            let energyText = "";
-            if (index == 0) {
-              energyText = "(High Energy)";
-            } else if (index == 9) {
-              energyText = "(Low Energy)";
-            }
-            return (
-              <MoodItem
-                id={item.moodId}
-                name={item.moodName}
-                posX={item.positionX}
-                posY={item.positionY}
-                colour={item.colour}
-                navigation={navigation}
-                index={index}
-                energyText={energyText}
-              />
-            );
-          }}
-        />
+        <ScrollView horizontal={true}>
+          {cols.map((column, index) => (
+            <FlatList
+              key={index}
+
+              data={column}
+              ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
+              contentContainerStyle={styles.listContainer} // Add this line to style the list container
+              renderItem={({ item, index }) => {
+                let energyText = "";
+                if (index == 0) {
+                  energyText = "(High Energy)";
+                } else if (index == 9) {
+                  energyText = "(Low Energy)";
+                }
+
+                return (
+                  <MoodItem
+                    id={item.moodId}
+                    name={item.moodName}
+                    posX={item.positionX}
+                    posY={item.positionY}
+                    colour={item.colour}
+                    navigation={navigation}
+                    index={index}
+                    energyText={energyText}
+                  />
+                );
+              }}
+            />
+          ))}
+        </ScrollView>
+
         {filteredMoods?.length > 0 ? (
           <Button
             title={showAll ? "Show Filtered Moods" : "Show All Moods"}
@@ -156,14 +171,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    maxHeight: 600,
+    maxHeight: 650,
   },
   input: {
     borderWidth: 1,
     padding: 10,
   },
-
   heading: {
     fontSize: 30,
   },
+  listContainer: {},
 });

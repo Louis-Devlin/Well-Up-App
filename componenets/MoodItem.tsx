@@ -37,7 +37,7 @@ export default function MoodItem({
 }: ItemProps) {
   const { user, setUser } = useContext(UserContext);
   return (
-    <View>
+    <View style={{}}>
       <Pressable
         onPress={() => {
           Alert.alert("Todays Mood", `You have selected ${name}`, [
@@ -73,9 +73,9 @@ export default function MoodItem({
 }
 const styles = StyleSheet.create({
   center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+
+
+
     color: "white",
   },
 });
