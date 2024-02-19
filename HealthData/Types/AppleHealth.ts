@@ -10,11 +10,7 @@ const { Permissions } = AppleHeathKit.Constants;
 export default class AppleHealth implements HealthData {
   private permissions: HealthKitPermissions = {
     permissions: {
-      read: [
-        Permissions.Steps,
-        Permissions.HeartRate,
-        Permissions.SleepAnalysis,
-      ],
+      read: [Permissions.SleepAnalysis],
       write: [],
     },
   };

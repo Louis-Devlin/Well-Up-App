@@ -17,10 +17,7 @@ type RootStackParamList = {
   MoodLogResult: undefined;
 };
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { MoodTotals } from "../Types/MoodTotals";
-import { ApiCall } from "../functions/ApiCall";
 import DissmissableArea from "../componenets/DissmissableArea";
-import StepCount from "../componenets/StepCount";
 import { UserContext } from "../Types/UserContext";
 import { HealthDataContext } from "../Types/HealthDataContext";
 import HealthData from "../HealthData/interfaces/HealthData";
@@ -41,9 +38,10 @@ export default function LogMood({ route, navigation }: Props) {
   const healthDataContext = useContext(HealthDataContext);
   const healthData = healthDataContext?.get<HealthData>(TYPES.HealthData);
   const [sleepHours, setSleepHours] = useState(0);
-  const [filteredMoods, setFilteredMoods] = useState<Mood[] | null>();
+  const [filteredMoods, setFilteredMoods] = useState<Mood[][] | null>();
   const [showAll, setShowAll] = useState(false);
   const [cols, setCols] = useState<Mood[][]>([]);
+  const [filteredCols, setFilteredCols] = useState<Mood[][]>([]);
   const fetchMoods = async (text: string) => {
     setMoods([]);
     setFilteredMoods([]);
@@ -53,43 +51,43 @@ export default function LogMood({ route, navigation }: Props) {
           text
         )}`
       );
-      console.log("Sentiment Response", sentimentResponse.data);
 
       const moodsResponse = await axios.get(
         `https://well-up-api-kurpegc27a-nw.a.run.app/api/Moods?sentiment=${sentimentResponse.data}`
       );
 
-      const baseList = [...moodsResponse.data];
-      const filteredMoods = [];
-      if (moodsResponse.data.length > 0) {
-        if (moodsResponse.data[0].colour === "red") {
-          baseList.reverse();
-        }
-        if (sleepHours === 0) {
-          baseList.push(...baseList.slice(0, 3));
-        } else if (sleepHours === 9) {
-          baseList.push(...baseList.slice(7, 10));
-        } else {
-          if (sleepHours - 1 >= 0 && sleepHours - 1 < baseList.length) {
-            filteredMoods.push(baseList[sleepHours - 1]);
-          }
-          if (sleepHours >= 0 && sleepHours < baseList.length) {
-            filteredMoods.push(baseList[sleepHours]);
-          }
-          if (sleepHours + 1 >= 0 && sleepHours + 1 < baseList.length) {
-            filteredMoods.push(baseList[sleepHours + 1]);
-          }
-        }
-      }
-      const columns: Mood[][] = Array.from({ length: 10 }, () => []); // Create an array of 10 empty arrays
+      let filteredCols: Mood[][] = Array.from({ length: 10 }, () => []); // Create an array of 10 empty arrays for filtered cols
+
+      const columns: Mood[][] = Array.from({ length: 10 }, () => []); // Create an array of 10 empty arrays for all cols
 
       moodsResponse.data.forEach((mood: Mood) => {
         columns[mood.positionY].push(mood); // Push each mood into its corresponding column
       });
+      console.log(sleepHours);
+      const reversedCols = columns.map((col) => {
+        return [...col].reverse();
+      });
+
+      if (sleepHours === 0) {
+        filteredCols = reversedCols.map((col) =>
+          col.filter((mood) => mood.positionX >= 3)
+        );
+      } else if (sleepHours >= 9) {
+        filteredCols = reversedCols.map((col) =>
+          col.filter((mood) => mood.positionX <= 7)
+        );
+      } else {
+        filteredCols = reversedCols.map((col) =>
+          col.slice(sleepHours - 1, sleepHours + 2)
+        );
+      }
+      const rereversedCols = filteredCols.map((col) => {
+        return [...col].reverse();
+      });
       setCols(columns);
+      setFilteredCols(rereversedCols); // Set the filtered cols array
       setMoods(moodsResponse.data);
-      setFilteredMoods(filteredMoods);
-      console.log("Filtered Moods", filteredMoods.length);
+      setFilteredMoods(rereversedCols);
     } catch (error) {
       console.error("Error fetching moods:", error);
     }
@@ -125,7 +123,7 @@ export default function LogMood({ route, navigation }: Props) {
         />
         <Text>{"\n"}</Text>
         <ScrollView horizontal={true}>
-          {cols.map((column, index) => (
+          {(showAll ? cols : filteredCols)?.map((column, index) => (
             <FlatList
               key={index}
               data={column}
@@ -156,7 +154,7 @@ export default function LogMood({ route, navigation }: Props) {
           ))}
         </ScrollView>
 
-        {filteredMoods?.length > 0 ? (
+        {filteredCols?.length > 0 ? (
           <Button
             title={showAll ? "Show Filtered Moods" : "Show All Moods"}
             onPress={() => setShowAll(!showAll)}
@@ -165,8 +163,8 @@ export default function LogMood({ route, navigation }: Props) {
         <Button
           title="Incorrect Suggestion?"
           onPress={() => {
-            navigation.navigate("Suggestions",{
-              text:text
+            navigation.navigate("Suggestions", {
+              text: text,
             });
           }}
         />
