@@ -1,5 +1,9 @@
-import React, { useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import {
+  NavigationContainer,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
 import LogMood from "./screens/LogMood";
@@ -20,6 +24,9 @@ import AppleHealth from "./HealthData/Types/AppleHealth";
 import { Platform } from "react-native";
 import { HealthDataContext } from "./Types/HealthDataContext";
 import Suggestions from "./screens/Suggestions";
+import { Button, Text } from "react-native-paper";
+import { View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function App() {
   const container = new Container();
   if (Platform.OS === "ios") {
@@ -27,11 +34,80 @@ export default function App() {
   }
   const [user, setUser] = useState(null);
   const Stack = createNativeStackNavigator<RootStackParamList>();
+  const [loading, setLoading] = useState(true);
+  const loadUser = async () => {
+    try {
+      const user = await AsyncStorage.getItem("user");
+      if (user) {
+        setUser(JSON.parse(user));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
+  };
+  useEffect(() => {
+    loadUser();
+  }, []);
+  if (loading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
   return (
     <NavigationContainer>
       <HealthDataContext.Provider value={container}>
         <UserContext.Provider value={{ user, setUser }}>
-          <Stack.Navigator initialRouteName="Login">
+          <Stack.Navigator
+            initialRouteName={user ? "Home" : "Login"}
+            screenOptions={{
+              headerLeft: () => {
+                const navigation = useNavigation();
+                const route = useRoute();
+                if (route.name === "LogMood" || route.name === "HabitTrack") {
+                  return (
+                    <Button
+                      onPress={() => {
+                        navigation.navigate("Home");
+                      }}
+                    >
+                      Home
+                    </Button>
+                  );
+                } else if (route.name !== "Home" && route.name !== "Login") {
+                  return (
+                    <Button onPress={() => navigation.goBack()}>Back</Button>
+                  );
+                } else {
+                  return <View></View>;
+                }
+              },
+              headerRight: () => {
+                const navigation = useNavigation();
+                if (user) {
+                  return (
+                    <Button
+                      onPress={async () => {
+                        try {
+                          await AsyncStorage.removeItem("user");
+                          setUser(null);
+                          navigation.navigate("Login");
+                        } catch (error) {
+                          console.error(error);
+                        }
+                      }}
+                    >
+                      Log Out
+                    </Button>
+                  );
+                }
+                return null;
+              },
+              headerTitle: () => <Text>Well Up</Text>,
+            }}
+          >
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
             <Stack.Screen name="Home" component={Home} />
