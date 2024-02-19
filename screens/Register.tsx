@@ -6,7 +6,7 @@ import DissmissableArea from "../componenets/DissmissableArea";
 import { Button } from "react-native-paper";
 import { ApiCall } from "../functions/ApiCall";
 import { UserContext } from "../Types/UserContext";
-type Props = NativeStackScreenProps<RootStackParamList, "Home">;
+type Props = NativeStackScreenProps<RootStackParamList, "Register">;
 export default function Register({ route, navigation }: Props) {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");

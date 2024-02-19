@@ -11,13 +11,15 @@ import Icon from "react-native-vector-icons/AntDesign";
 import { AbstractChartConfig } from "react-native-chart-kit/dist/AbstractChart";
 import WeeklyMoodChart from "../componenets/WeeklyMoodChart";
 import { UserContext } from "../Types/UserContext";
-type Props = NativeStackScreenProps<RootStackParamList, "MoodLog">;
+import { useIsFocused } from "@react-navigation/native";
+type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 export default function Home({ route, navigation }: Props) {
   const { user, setUser } = useContext(UserContext);
   const [moodTotals, setMoodTotals] = useState<MoodTotals>(new MoodTotals());
   const [habitTotals, setHabitTotals] = useState<HabitTotalsWeekly>(
     new HabitTotalsWeekly()
   );
+  const isFocussed = useIsFocused();
 
   const getWeeklyMoodTotals = async () => {
     await ApiCall.GetWeeklyMoodTotal(user?.userId || -1).then(
@@ -35,9 +37,14 @@ export default function Home({ route, navigation }: Props) {
   };
 
   useEffect(() => {
+    if (!isFocussed) {
+      return;
+    }
+    console.log("Use Effect Running");
     getWeeklyMoodTotals();
     getWeeklyHabiitTotals();
-  }, []);
+  }, [isFocussed]);
+
   const chartConfig: AbstractChartConfig = {
     backgroundGradientFrom: "#FFFFFF",
     backgroundGradientFromOpacity: 0,

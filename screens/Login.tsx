@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
 import React from "react";
 import { Button } from "react-native-paper";
 import DissmissableArea from "../componenets/DissmissableArea";
@@ -6,7 +6,8 @@ import { ApiCall } from "../functions/ApiCall";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Types/RootStackParamList";
 import { UserContext } from "../Types/UserContext";
-type Props = NativeStackScreenProps<RootStackParamList, "Home">;
+import AsyncStorage from "@react-native-async-storage/async-storage";
+type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 export default function Login({ route, navigation }: Props) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -17,7 +18,13 @@ export default function Login({ route, navigation }: Props) {
     if (user.userId >= 0) {
       setUser(user);
       console.log("Logging in ....");
-      navigation.navigate("Home");
+      try {
+        await AsyncStorage.setItem("user", JSON.stringify(user));
+        navigation.navigate("Home");
+      } catch (error) {
+        console.log(error);
+        Alert.alert("Error", "There was an error logging in");
+      }
     }
   };
 

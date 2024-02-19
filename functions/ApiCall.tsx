@@ -266,4 +266,14 @@ export class ApiCall {
     })
     return userId;
   }
+  static async SuggestSentiment(requestBody: any):Promise<ApiResponse>{
+    let response = new ApiResponse();
+    await axios.post("https://well-up-api-kurpegc27a-nw.a.run.app/api/Sentiment", requestBody).then((res) => {
+      response.responseData = res.data;
+      response.success = true;
+    }).catch((err) => {
+      response.error = err;
+    });
+    return response;
+  }
 }

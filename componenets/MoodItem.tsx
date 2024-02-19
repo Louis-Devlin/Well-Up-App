@@ -50,7 +50,14 @@ export default function MoodItem({
                   new Date()
                 );
                 if (result.success) {
-                  navigation.navigate("MoodLogResult");
+                  Alert.alert("Success", "Mood Logged", [
+                    {
+                      text: "OK",
+                      onPress: () => {
+                        navigation.navigate("Home");
+                      },
+                    },
+                  ]);
                 }
                 // Error Here
               },
@@ -73,9 +80,6 @@ export default function MoodItem({
 }
 const styles = StyleSheet.create({
   center: {
-
-
-
     color: "white",
   },
 });
