@@ -26,17 +26,22 @@ export default function Suggestions({ route, navigation }: Props) {
       <Text style={styles.prop}>Your Text: {text}</Text>
       <Text style={styles.prop}>Predicted Sentiment: {sentiment} </Text>
 
-      <TouchableOpacity onPress={() => handlePress("positive")}>
+      <TouchableOpacity
+        onPress={() => handlePress("positive")}
+        disabled={sentiment === "positive"}
+      >
         <View
           style={[
             styles.radioButtonContainer,
             option === "positive" && styles.selectedButton,
+            sentiment === "positive" && styles.disabledButton,
           ]}
         >
           <Text
             style={[
               styles.radioButtonLabel,
               option === "positive" && styles.selectedLabel,
+              sentiment === "positive" && styles.disabledLabel,
             ]}
           >
             Positive
@@ -49,17 +54,22 @@ export default function Suggestions({ route, navigation }: Props) {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => handlePress("negative")}>
+      <TouchableOpacity
+        onPress={() => handlePress("negative")}
+        disabled={sentiment === "negative"}
+      >
         <View
           style={[
             styles.radioButtonContainer,
             option === "negative" && styles.selectedButton,
+            sentiment === "negative" && styles.disabledButton,
           ]}
         >
           <Text
             style={[
               styles.radioButtonLabel,
               option === "negative" && styles.selectedLabel,
+              sentiment === "negative" && styles.disabledLabel,
             ]}
           >
             Negative
@@ -72,17 +82,22 @@ export default function Suggestions({ route, navigation }: Props) {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => handlePress("neutral")}>
+      <TouchableOpacity
+        onPress={() => handlePress("neutral")}
+        disabled={sentiment === "neutral"}
+      >
         <View
           style={[
             styles.radioButtonContainer,
             option === "neutral" && styles.selectedButton,
+            sentiment === "neutral" && styles.disabledButton,
           ]}
         >
           <Text
             style={[
               styles.radioButtonLabel,
               option === "neutral" && styles.selectedLabel,
+              sentiment === "neutral" && styles.disabledLabel,
             ]}
           >
             Neutral
@@ -133,4 +148,10 @@ const styles = StyleSheet.create({
   },
   selectedButton: {},
   selectedLabel: {},
+  disabledButton: {
+    backgroundColor: "#ccc",
+  },
+  disabledLabel: {
+    color: "#888",
+  },
 });
