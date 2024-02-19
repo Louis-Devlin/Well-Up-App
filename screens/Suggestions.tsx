@@ -1,18 +1,43 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { RootStackParamList } from "../Types/RootStackParamList";
 import { Button, RadioButton } from "react-native-paper";
+import { ApiCall } from "../functions/ApiCall";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Suggestions">;
 
 export default function Suggestions({ route, navigation }: Props) {
-  const [option, setOption] = React.useState("positive"); // Set the default value for the radio button
+  const [option, setOption] = React.useState("positive");
   const { text } = route.params;
   const { sentiment } = route.params;
 
   const handlePress = (value: string) => {
     setOption(value);
+  };
+
+  const handleSubmit = async () => {
+    let requestBody = {
+      Sentiment: option,
+      Text: text,
+    };
+    const response = await ApiCall.SuggestSentiment(requestBody);
+    if (!response.success) {
+      console.log("Error submitting sentiment suggestion");
+      Alert.alert(
+        "Error",
+        "Error submitting sentiment suggestion, please try again later"
+      );
+      return;
+    }
+    Alert.alert("Success", "Sentiment suggestion submitted successfully", [
+      {
+        text: "OK",
+        onPress: () => navigation.navigate("Home"),
+      },
+    ]);
+
+    console.log(requestBody);
   };
 
   return (
@@ -24,7 +49,7 @@ export default function Suggestions({ route, navigation }: Props) {
         improve our Machine Learning Model.
       </Text>
       <Text style={styles.prop}>Your Text: {text}</Text>
-      <Text style={styles.prop}>Predicted Sentiment: {sentiment} </Text>
+      <Text style={styles.prop}>Current Predicted Sentiment: {sentiment} </Text>
 
       <TouchableOpacity
         onPress={() => handlePress("positive")}
@@ -109,7 +134,7 @@ export default function Suggestions({ route, navigation }: Props) {
           />
         </View>
       </TouchableOpacity>
-      <Button>
+      <Button mode="contained" onPress={() => handleSubmit()}>
         <Text>Submit</Text>
       </Button>
     </View>
