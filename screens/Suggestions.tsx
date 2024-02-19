@@ -8,7 +8,8 @@ type Props = NativeStackScreenProps<RootStackParamList, "Suggestions">;
 
 export default function Suggestions({ route, navigation }: Props) {
   const [option, setOption] = React.useState("positive"); // Set the default value for the radio button
-  const { text } = route.params; // Access the props passed through navigation
+  const { text } = route.params;
+  const { sentiment } = route.params;
 
   const handlePress = (value: string) => {
     setOption(value);
@@ -23,7 +24,7 @@ export default function Suggestions({ route, navigation }: Props) {
         improve our Machine Learning Model.
       </Text>
       <Text style={styles.prop}>Your Text: {text}</Text>
-      <Text style={styles.prop}>Predicted Sentiment: </Text>
+      <Text style={styles.prop}>Predicted Sentiment: {sentiment} </Text>
 
       <TouchableOpacity onPress={() => handlePress("positive")}>
         <View

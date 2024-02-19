@@ -33,24 +33,21 @@ export default function LogMood({ route, navigation }: Props) {
     colour: string;
   };
   const { user, setUser } = useContext(UserContext);
-
-  const [moods, setMoods] = useState<Mood[] | null>();
+  const [sentiment, setSentiment] = useState("");
   const healthDataContext = useContext(HealthDataContext);
   const healthData = healthDataContext?.get<HealthData>(TYPES.HealthData);
   const [sleepHours, setSleepHours] = useState(0);
-  const [filteredMoods, setFilteredMoods] = useState<Mood[][] | null>();
   const [showAll, setShowAll] = useState(false);
   const [cols, setCols] = useState<Mood[][]>([]);
   const [filteredCols, setFilteredCols] = useState<Mood[][]>([]);
   const fetchMoods = async (text: string) => {
-    setMoods([]);
-    setFilteredMoods([]);
     try {
       const sentimentResponse = await axios.get(
         `https://well-up-api-kurpegc27a-nw.a.run.app/api/Sentiment/sentimentprediction?sentimentText=${encodeURI(
           text
         )}`
       );
+      setSentiment(sentimentResponse.data);
 
       const moodsResponse = await axios.get(
         `https://well-up-api-kurpegc27a-nw.a.run.app/api/Moods?sentiment=${sentimentResponse.data}`
@@ -70,24 +67,25 @@ export default function LogMood({ route, navigation }: Props) {
 
       if (sleepHours === 0) {
         filteredCols = reversedCols.map((col) =>
-          col.filter((mood) => mood.positionX >= 3)
+          col.filter((mood) => mood.positionX >= 7 && mood.positionX <= 9)
         );
+        console.log("Sleep Hours is 0");
       } else if (sleepHours >= 9) {
         filteredCols = reversedCols.map((col) =>
-          col.filter((mood) => mood.positionX <= 7)
+          col.filter((mood) => mood.positionX <= 2)
         );
+        console.log("Sleep Hours is 9 or greater");
       } else {
         filteredCols = reversedCols.map((col) =>
           col.slice(sleepHours - 1, sleepHours + 2)
         );
+        console.log("Sleep Hours is between 1 and 8");
       }
       const rereversedCols = filteredCols.map((col) => {
         return [...col].reverse();
       });
       setCols(columns);
       setFilteredCols(rereversedCols); // Set the filtered cols array
-      setMoods(moodsResponse.data);
-      setFilteredMoods(rereversedCols);
     } catch (error) {
       console.error("Error fetching moods:", error);
     }
@@ -165,6 +163,7 @@ export default function LogMood({ route, navigation }: Props) {
           onPress={() => {
             navigation.navigate("Suggestions", {
               text: text,
+              sentiment: sentiment,
             });
           }}
         />
