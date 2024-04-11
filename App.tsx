@@ -28,6 +28,7 @@ import { Button, Text } from "react-native-paper";
 import { View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Walkthrough from "./screens/Walkthrough";
+import PrivacyNotice from "./screens/PrivacyNotice";
 export default function App() {
   const container = new Container();
   if (Platform.OS === "ios") {
@@ -121,6 +122,7 @@ export default function App() {
             <Stack.Screen name="PastLogs" component={PastDays} />
             <Stack.Screen name="Suggestions" component={Suggestions} />
             <Stack.Screen name="Walkthrough" component={Walkthrough} />
+            <Stack.Screen name="PrivacyNotice" component={PrivacyNotice} />
           </Stack.Navigator>
         </UserContext.Provider>
       </HealthDataContext.Provider>

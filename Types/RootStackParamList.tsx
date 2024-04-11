@@ -10,4 +10,5 @@ export type RootStackParamList = {
   Register: undefined;
   Suggestions: { text: string; sentiment: string };
   Walkthrough: undefined;
+  PrivacyNotice: undefined;
 };
