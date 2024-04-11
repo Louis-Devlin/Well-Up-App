@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, Text, TextInput, StyleSheet, Alert } from "react-native";
+import { View, Text, TextInput, StyleSheet, Alert, Switch } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Types/RootStackParamList";
 import DissmissableArea from "../componenets/DissmissableArea";
@@ -13,14 +13,19 @@ export default function Register({ route, navigation }: Props) {
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const { user, setUser } = useContext(UserContext);
+  const [isSelected, setSelection] = React.useState(false);
   const register = async () => {
+    if (!isSelected) {
+      Alert.alert("Please agree to the Privacy Notice");
+      return;
+    }
     if (password === confirmPassword) {
       const user = await ApiCall.Register(name, email, password);
       if (user >= 0) {
         const user = await ApiCall.Login(email, password);
         if (user.userId >= 0) {
           setUser(user);
-          navigation.navigate("Home");
+          navigation.navigate("Walkthrough");
         }
       }
     } else {
@@ -62,6 +67,23 @@ export default function Register({ route, navigation }: Props) {
             placeholder="Enter your password"
             secureTextEntry={true}
           />
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Switch value={isSelected} onValueChange={setSelection} />
+            <Text style={{ marginLeft: 8 }}>
+              I agree to the{" "}
+              <Text
+                style={{ color: "blue" }}
+                onPress={() => navigation.navigate("PrivacyNotice")}
+              >
+                Privacy Notice
+              </Text>
+            </Text>
+          </View>
         </View>
 
         <Button mode="contained" onPress={register}>
