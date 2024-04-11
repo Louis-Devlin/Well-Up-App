@@ -36,101 +36,98 @@ export default function Suggestions({ route, navigation }: Props) {
         onPress: () => navigation.navigate("Home"),
       },
     ]);
-
-    console.log(requestBody);
   };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Suggestions</Text>
       <Text style={styles.description}>
-        We are sorry the mood prediction wasn't quite right, please select
-        Positive, Negative, or Neutral and then submit. This will help to
-        improve our Machine Learning Model.
+        We are sorry the mood prediction wasn't quite right. {"\n\n"}Please
+        select Positive, Negative, or Neutral and submit. This will help to
+        improve our prediction model.
       </Text>
       <Text style={styles.prop}>Your Text: {text}</Text>
-      <Text style={styles.prop}>Current Predicted Sentiment: {sentiment} </Text>
+      <Text style={styles.prop}>Current Prediction: {sentiment.charAt(0).toUpperCase() + sentiment.slice(1)} </Text>
 
       <TouchableOpacity
-        onPress={() => handlePress("positive")}
+        onPress={() => handlePress("Positive")}
         disabled={sentiment === "positive"}
       >
         <View
           style={[
             styles.radioButtonContainer,
-            option === "positive" && styles.selectedButton,
+            option === "Positive" && styles.selectedButton,
             sentiment === "positive" && styles.disabledButton,
           ]}
         >
           <Text
             style={[
               styles.radioButtonLabel,
-              option === "positive" && styles.selectedLabel,
+              option === "Positive" && styles.selectedLabel,
               sentiment === "positive" && styles.disabledLabel,
             ]}
           >
             Positive
           </Text>
           <RadioButton
-            value="positive"
-            status={option === "positive" ? "checked" : "unchecked"}
-            onPress={() => handlePress("positive")}
+            value="Positive"
+            status={option === "Positive" ? "checked" : "unchecked"}
+            onPress={() => handlePress("Positive")}
           />
         </View>
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => handlePress("negative")}
+        onPress={() => handlePress("Negative")}
         disabled={sentiment === "negative"}
       >
         <View
           style={[
             styles.radioButtonContainer,
-            option === "negative" && styles.selectedButton,
+            option === "Negative" && styles.selectedButton,
             sentiment === "negative" && styles.disabledButton,
           ]}
         >
           <Text
             style={[
               styles.radioButtonLabel,
-              option === "negative" && styles.selectedLabel,
+              option === "Negative" && styles.selectedLabel,
               sentiment === "negative" && styles.disabledLabel,
             ]}
           >
             Negative
           </Text>
           <RadioButton
-            value="negative"
-            status={option === "negative" ? "checked" : "unchecked"}
-            onPress={() => handlePress("negative")}
+            value="Negative"
+            status={option === "Negative" ? "checked" : "unchecked"}
+            onPress={() => handlePress("Negative")}
           />
         </View>
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => handlePress("neutral")}
+        onPress={() => handlePress("Neutral")}
         disabled={sentiment === "neutral"}
       >
         <View
           style={[
             styles.radioButtonContainer,
-            option === "neutral" && styles.selectedButton,
+            option === "Neutral" && styles.selectedButton,
             sentiment === "neutral" && styles.disabledButton,
           ]}
         >
           <Text
             style={[
               styles.radioButtonLabel,
-              option === "neutral" && styles.selectedLabel,
+              option === "Neutral" && styles.selectedLabel,
               sentiment === "neutral" && styles.disabledLabel,
             ]}
           >
             Neutral
           </Text>
           <RadioButton
-            value="neutral"
-            status={option === "neutral" ? "checked" : "unchecked"}
-            onPress={() => handlePress("neutral")}
+            value="Neutral"
+            status={option === "Neutral" ? "checked" : "unchecked"}
+            onPress={() => handlePress("Neutral")}
           />
         </View>
       </TouchableOpacity>
