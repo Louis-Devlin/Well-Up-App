@@ -9,4 +9,5 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   Suggestions: { text: string; sentiment: string };
+  Walkthrough: undefined;
 };
