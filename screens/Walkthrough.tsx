@@ -33,11 +33,46 @@ export default function ({ route, navigation }: Props) {
   ];
   return (
     <>
-      <Image
-        source={images[currentSlide]}
-        style={{ width: '100%', height: '70%', resizeMode: 'contain' }}
-      ></Image>
-      <Text style={styles.text}>{messages[currentSlide]}</Text>
+      {currentSlide === 0 ? (
+        <>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              marginBottom: 10,
+              alignSelf: "center",
+            }}
+          >
+            Welcome to Well Up!{" "}
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              marginBottom: 10,
+              padding: 10,
+            }}
+          >
+            Well Up is a mood and habit tracking app. The mood tracking portion
+            utilises the Mood Meter developed by the Yale Centre of Emotional
+            Inteligence spliting emotions into four quadrants. {"\n\n"}
+            Red symbolises high energy negative emotions, yellow symbolises low
+            energy negative emotions, green symbolises low energy positive
+            emotions and blue symbolises high energy positive emotions.
+          </Text>
+          <Image
+            style={{ width: "100%", height: "50%", resizeMode: "contain" }}
+            source={require("../assets/images/MoodMeter.png")}
+          ></Image>
+        </>
+      ) : (
+        <View>
+          <Image
+            source={images[currentSlide - 1]}
+            style={{ width: "100%", height: "75%", resizeMode: "contain" }}
+          />
+          <Text style={styles.text}>{messages[currentSlide - 1]}</Text>
+        </View>
+      )}
       <View style={styles.buttonContainer}>
         {currentSlide > 0 && (
           <Button
@@ -48,7 +83,7 @@ export default function ({ route, navigation }: Props) {
             Previous
           </Button>
         )}
-        {currentSlide < messages.length - 1 && (
+        {currentSlide < messages.length && (
           <Button
             mode="contained"
             onPress={() => setCurrentSlide(currentSlide + 1)}
@@ -74,10 +109,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 10,
+    alignSelf: "center",
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 20,
   },
   button: {
@@ -91,7 +127,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   homeButton: {
-    width: '95%',
-    alignSelf: 'center',
-  }
+    width: "95%",
+    alignSelf: "center",
+  },
 });
