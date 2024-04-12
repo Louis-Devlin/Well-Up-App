@@ -16,8 +16,8 @@ export default function Login({ route, navigation }: Props) {
   const login = async () => {
     const response = await ApiCall.Login(email, password);
     console.log(response);
-    if (response.userId >= 0) {
-      setUser(response.userId);
+    if (response.user.userId >= 0) {
+      setUser(response.user);
       try {
         await AsyncStorage.setItem("user", JSON.stringify(user));
         navigation.navigate("Home");

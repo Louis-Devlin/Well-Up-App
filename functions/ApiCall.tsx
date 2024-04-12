@@ -244,7 +244,7 @@ export class ApiCall {
 
   static async Login(email: string, password: string): Promise<any> {
     let response: any = {
-      userId: -1,
+      user: {},
       statusCode: 0,
     };
     await axios
@@ -254,7 +254,7 @@ export class ApiCall {
       })
       .then((res) => {
         console.log(`response from login: ${res.data}`);
-        response.userId = res.data.userId;
+        response.user = res.data;
         response.statusCode = res.status;
       })
       .catch((err) => {
