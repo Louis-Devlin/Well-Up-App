@@ -243,7 +243,10 @@ export class ApiCall {
   }
 
   static async Login(email: string, password: string): Promise<any> {
-    let id: number = -1;
+    let response: any = {
+      userId: -1,
+      statusCode: 0,
+    };
     await axios
       .post("https://well-up-api-kurpegc27a-nw.a.run.app/api/User/login", {
         email: email,
@@ -251,28 +254,32 @@ export class ApiCall {
       })
       .then((res) => {
         console.log(`response from login: ${res.data}`);
-        id = res.data;
+        response.userId = res.data.userId;
+        response.statusCode = res.status;
+      })
+      .catch((err) => {
+        console.log(`error from login: ${err}`);
+        response.statusCode = err.response.status;
       });
-    return id;
+    return response;
   }
   static async Register(name: string, email: string, password: string) {
-    let userId: number = -1;
     let response: any = {
       userId: -1,
       statusCode: 0,
     };
     await axios
       .post("https://well-up-api-kurpegc27a-nw.a.run.app/api/User", {
-      name: name,
-      email: email,
-      password: password,
+        name: name,
+        email: email,
+        password: password,
       })
       .then((res) => {
-      response.statusCode = res.status;
-      userId = res.data;
+        response.statusCode = res.status;
+        userId = res.data;
       })
       .catch((err) => {
-      response.statusCode = err.response.status;
+        response.statusCode = err.response.status;
       });
     return response;
   }

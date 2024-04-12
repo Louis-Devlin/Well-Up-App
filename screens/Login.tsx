@@ -14,10 +14,10 @@ export default function Login({ route, navigation }: Props) {
   const { user, setUser } = React.useContext(UserContext);
 
   const login = async () => {
-    const user = await ApiCall.Login(email, password);
-    if (user.userId >= 0) {
-      setUser(user);
-      console.log("Logging in ....");
+    const response = await ApiCall.Login(email, password);
+    console.log(response);
+    if (response.userId >= 0) {
+      setUser(response.userId);
       try {
         await AsyncStorage.setItem("user", JSON.stringify(user));
         navigation.navigate("Home");
@@ -25,7 +25,9 @@ export default function Login({ route, navigation }: Props) {
         console.log(error);
         Alert.alert("Error", "There was an error logging in");
       }
+      return;
     }
+    Alert.alert("Error", "Invalid email or password");
   };
 
   return (
