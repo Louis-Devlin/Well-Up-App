@@ -59,7 +59,6 @@ export default function MoodItem({
                     },
                   ]);
                 }
-                // Error Here
               },
             },
             {
@@ -73,7 +72,8 @@ export default function MoodItem({
         style={getBackgroundStyle(colour, index) as any}
       >
         <Text style={getTextStyle(posX, posY) as any}>{name}</Text>
-        <Text style={styles.center}>{energyText}</Text>
+      
+        <Text style={[styles.center, colour === "yellow" && { color: "black" }]}>{energyText}</Text>
       </Pressable>
     </View>
   );
