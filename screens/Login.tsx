@@ -14,6 +14,8 @@ export default function Login({ route, navigation }: Props) {
   const { user, setUser } = React.useContext(UserContext);
 
   const login = async () => {
+    setEmail("");
+    setPassword("");
     const response = await ApiCall.Login(email, password);
     console.log(response);
     if (response.user.userId >= 0) {
@@ -51,17 +53,18 @@ export default function Login({ route, navigation }: Props) {
             secureTextEntry={true}
           />
         </View>
-        <View style={styles.buttonContainer}>
-          <Button
-            mode="contained"
-            onPress={() => navigation.navigate("Register")}
-          >
-            Register
-          </Button>
+        <View>
           <Button mode="contained" onPress={login}>
             Login
           </Button>
         </View>
+        <Text
+          style={{ padding: 20 }}
+          onPress={() => navigation.navigate("Register")}
+        >
+          Not got an account? {""}
+          <Text style={{ color: "blue" }}>Sign up here</Text>
+        </Text>
       </View>
     </DissmissableArea>
   );
@@ -72,6 +75,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   loginText: {
+    marginTop: 20,
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
