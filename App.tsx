@@ -83,7 +83,18 @@ export default function App() {
                   return (
                     <Button onPress={() => navigation.goBack()}>Back</Button>
                   );
-                } else {
+                  
+                }
+                if (route.name === "Home") {
+                  return (
+                    <Button
+                      onPress={() => navigation.navigate("Walkthrough")}
+                    >
+                      Help
+                    </Button>
+                  );
+                }
+                 else {
                   return <View></View>;
                 }
               },
