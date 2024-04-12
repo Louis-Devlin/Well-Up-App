@@ -19,6 +19,20 @@ export default function MoodTotalsTable({ moodData }: ItemProps) {
         return "❓";
     }
   };
+  if(moodData == undefined || moodData.length == 0) {
+    return (
+      <DataTable>
+        <DataTable.Header>
+          <DataTable.Title>Habit</DataTable.Title>
+          <DataTable.Title>Count</DataTable.Title>
+        </DataTable.Header>
+        <DataTable.Row>
+          <DataTable.Cell>No Data</DataTable.Cell>
+          <DataTable.Cell>No Data</DataTable.Cell>
+        </DataTable.Row>
+      </DataTable>
+    )
+  }
   return (
     <DataTable>
       <DataTable.Header>

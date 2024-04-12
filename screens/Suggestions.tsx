@@ -8,7 +8,7 @@ import { ApiCall } from "../functions/ApiCall";
 type Props = NativeStackScreenProps<RootStackParamList, "Suggestions">;
 
 export default function Suggestions({ route, navigation }: Props) {
-  const [option, setOption] = React.useState("positive");
+  const [option, setOption] = React.useState("");
   const { text } = route.params;
   const { sentiment } = route.params;
 
@@ -17,8 +17,12 @@ export default function Suggestions({ route, navigation }: Props) {
   };
 
   const handleSubmit = async () => {
+   if (option === "") {
+      Alert.alert("Error", "Please select a sentiment");
+      return;
+    }
     let requestBody = {
-      Sentiment: option,
+      Sentiment: option.toLowerCase(),
       Text: text,
     };
     const response = await ApiCall.SuggestSentiment(requestBody);
@@ -26,11 +30,11 @@ export default function Suggestions({ route, navigation }: Props) {
       console.log("Error submitting sentiment suggestion");
       Alert.alert(
         "Error",
-        "Error submitting sentiment suggestion, please try again later"
+        "Error submitting suggestion, please try again later"
       );
       return;
     }
-    Alert.alert("Success", "Sentiment suggestion submitted successfully", [
+    Alert.alert("Success", "Suggestion submitted successfully", [
       {
         text: "OK",
         onPress: () => navigation.navigate("Home"),
@@ -46,7 +50,7 @@ export default function Suggestions({ route, navigation }: Props) {
         improve our prediction model.
       </Text>
       <Text style={styles.prop}>Your Text: {text}</Text>
-      <Text style={styles.prop}>Current Prediction: {sentiment.charAt(0).toUpperCase() + sentiment.slice(1)} </Text>
+      <Text style={styles.prop}>Current Prediction : {sentiment} </Text>
 
       <TouchableOpacity
         onPress={() => handlePress("Positive")}

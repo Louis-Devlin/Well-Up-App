@@ -28,7 +28,7 @@ export default function AddHabit({ route, navigation }: Props) {
     });
   }, []);
 
-  // ...
+
 
   const startTracking = async (habitId: number): Promise<boolean> => {
     try {

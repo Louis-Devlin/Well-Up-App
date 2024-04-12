@@ -2,14 +2,15 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   FlatList,
   StyleSheet,
   ScrollView,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import MoodItem from "../componenets/MoodItem";
+import { Button } from "react-native-paper";
 type RootStackParamList = {
   Home: undefined;
   MoodLog: undefined;
@@ -41,6 +42,10 @@ export default function LogMood({ route, navigation }: Props) {
   const [cols, setCols] = useState<Mood[][]>([]);
   const [filteredCols, setFilteredCols] = useState<Mood[][]>([]);
   const fetchMoods = async (text: string) => {
+    if (text === "") {
+      Alert.alert("Error", "Please enter some text");
+      return;
+    }
     try {
       const sentimentResponse = await axios.get(
         `https://well-up-api-kurpegc27a-nw.a.run.app/api/Sentiment/sentimentprediction?sentimentText=${encodeURI(
@@ -111,15 +116,18 @@ export default function LogMood({ route, navigation }: Props) {
           value={text}
           onChangeText={setText}
         />
+        <Text></Text>
         <Button
+          style={{ marginBottom: 10 }}
+          mode="contained"
           onPress={() => {
             fetchMoods(text);
           }}
-          title="Predict Mood"
-          color="#841584"
           accessibilityLabel="Predict Mood"
-        />
-        <Text>{"\n"}</Text>
+        >
+          Predict Mood
+        </Button>
+
         <ScrollView horizontal={true}>
           {(showAll ? cols : filteredCols)?.map((column, index) => (
             <FlatList
@@ -151,22 +159,26 @@ export default function LogMood({ route, navigation }: Props) {
             />
           ))}
         </ScrollView>
-
+        <Text></Text>
         {filteredCols?.length > 0 ? (
-          <Button
-            title={showAll ? "Show Filtered Moods" : "Show All Moods"}
-            onPress={() => setShowAll(!showAll)}
-          />
+          <View>
+            <Button mode="contained" onPress={() => setShowAll(!showAll)}>
+              {showAll ? "Show Filtered Moods" : "Show All Moods"}
+            </Button>
+            <Button
+              style={{ marginTop: 10 }}
+              mode="contained"
+              onPress={() => {
+                navigation.navigate("Suggestions", {
+                  text: text,
+                  sentiment: sentiment,
+                });
+              }}
+            >
+              Incorrect Suggestion?
+            </Button>
+          </View>
         ) : null}
-        <Button
-          title="Incorrect Suggestion?"
-          onPress={() => {
-            navigation.navigate("Suggestions", {
-              text: text,
-              sentiment: sentiment,
-            });
-          }}
-        />
       </View>
     </DissmissableArea>
   );
@@ -176,7 +188,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    maxHeight: 650,
+    maxHeight: 680,
   },
   input: {
     borderWidth: 1,

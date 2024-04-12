@@ -2,12 +2,10 @@ import { Text, View, StyleSheet, Pressable } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Types/RootStackParamList";
-import { PieChart } from "react-native-chart-kit";
 import { ApiCall } from "../functions/ApiCall";
 import { MoodTotals } from "../Types/MoodTotals";
 import { HabitTotalsWeekly } from "../Types/HabitTotalsWeekly";
 import WeeklyHabitChart from "../componenets/WeeklyHabitChart";
-import Icon from "react-native-vector-icons/AntDesign";
 import { AbstractChartConfig } from "react-native-chart-kit/dist/AbstractChart";
 import WeeklyMoodChart from "../componenets/WeeklyMoodChart";
 import { UserContext } from "../Types/UserContext";
@@ -55,7 +53,7 @@ export default function Home({ route, navigation }: Props) {
   };
   return (
     <View>
-      <Text style={Styles.heading}>Well Up</Text>
+      <Text style={Styles.heading}></Text>
       <Pressable
         style={Styles.center}
         onPress={() => {
