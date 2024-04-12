@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Types/RootStackParamList";
@@ -17,6 +17,9 @@ export default function PastDays({ route, navigation }: Props) {
   }, []);
   return (
     <View>
+      <Text style={{ fontSize: 20, alignSelf: "center" }}>
+        Date: {new Date(logData?.date).toDateString()}
+      </Text>
       <HabitTotalsTable habitData={logData?.data?.habitLog} />
       <MoodTotalsTable moodData={logData?.data?.moodLog} />
     </View>

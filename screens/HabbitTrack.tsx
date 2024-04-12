@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, useContext } from "react";
 import { RootStackParamList } from "../Types/RootStackParamList";
-import { View, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet, Alert, Text } from "react-native";
 import { ApiCall } from "../functions/ApiCall";
 import Icon from "react-native-vector-icons/AntDesign";
 import { HabitTotals } from "../Types/HabitTotals";
@@ -58,7 +58,7 @@ export default function HabbitTrack({ route, navigation }: Props) {
       <View style={styles.buttonContainer}>
         <Icon.Button
           name="plus"
-         backgroundColor={"#6850a4"}
+          backgroundColor={"#6850a4"}
           onPress={() => {
             let habits: number[] = [];
             console.log(log);
@@ -82,6 +82,9 @@ export default function HabbitTrack({ route, navigation }: Props) {
           View past days
         </Icon.Button>
       </View>
+      <Text style={{ fontSize: 20, alignSelf: "center" }}>
+        Todays Date : {new Date().toDateString()}
+      </Text>
       <HabitTotalsTable
         log={log}
         setLog={setLog}
