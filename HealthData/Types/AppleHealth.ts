@@ -46,25 +46,24 @@ export default class AppleHealth implements HealthData {
       });
     });
   }
-  public getHeartRate(date: Date): Promise<number> {
-    return new Promise((resolve, reject) => {
-      if (!this.hasPermissions) {
-        resolve(0);
+
+  public async getHeartRate(date: Date): Promise<number> {
+    if (!this.hasPermissions) {
+      return 0;
+    }
+    const options: HealthInputOptions = {
+      startDate: date.toISOString(),
+    };
+    AppleHeathKit.getHeartRateSamples(options, (err, results) => {
+      console.log(results);
+      if (err) {
+        console.error(`Error trying to get heart rate: ${err}`);
+        throw err;
       }
-      const options: HealthInputOptions = {
-        startDate: date.toISOString(),
-      };
-      AppleHeathKit.getHeartRateSamples(options, (err, results) => {
-        console.log(results);
-        if (err) {
-          console.error(`Error trying to get heart rate: ${err}`);
-          reject(err);
-        } else {
-          console.log(results);
-          resolve(results[0]?.value);
-        }
-      });
+      console.log(results);
+      return results[0]?.value;
     });
+    return 0;
   }
   public getSleepData(date: Date): Promise<number> {
     console.log("I am here");

@@ -58,6 +58,7 @@ export default function HabbitTrack({ route, navigation }: Props) {
       <View style={styles.buttonContainer}>
         <Icon.Button
           name="plus"
+         backgroundColor={"#6850a4"}
           onPress={() => {
             let habits: number[] = [];
             console.log(log);
@@ -75,6 +76,7 @@ export default function HabbitTrack({ route, navigation }: Props) {
         </Icon.Button>
         <Icon.Button
           name="calendar"
+          backgroundColor={"#6850a4"}
           onPress={() => navigation.navigate("HabitLog")}
         >
           View past days

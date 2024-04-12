@@ -15,22 +15,40 @@ export default function Register({ route, navigation }: Props) {
   const { user, setUser } = useContext(UserContext);
   const [isSelected, setSelection] = React.useState(false);
   const register = async () => {
+    let errorMessage = "";
+    if (name === "") {
+      errorMessage += "Name is required\n";
+    }
+    if (email === "") {
+      errorMessage += "Email is required\n";
+    }
+    if (password === "") {
+      errorMessage += "Password is required\n";
+    }
+    if (confirmPassword === "") {
+      errorMessage += "Confirm Password is required\n";
+    }
     if (!isSelected) {
-      Alert.alert("Please agree to the Privacy Notice");
+      errorMessage += "Please agree to the privacy notice\n";
+    }
+    if (errorMessage !== "") {
+      Alert.alert("Error", errorMessage);
       return;
     }
-    if (password === confirmPassword) {
-      const user = await ApiCall.Register(name, email, password);
-      if (user >= 0) {
-        const user = await ApiCall.Login(email, password);
-        if (user.userId >= 0) {
-          setUser(user);
-          navigation.navigate("Walkthrough");
-        }
-      }
-    } else {
-      Alert.alert("Passwords do not match");
+    if (password != confirmPassword) {
+      Alert.alert("Error", "Passwords do not match");
+      return;
     }
+    const response = await ApiCall.Register(name, email, password);
+    if (response.statusCode == 201 && response.userId >= 0) {
+      const user = await ApiCall.Login(email, password);
+      if (user.userId >= 0) {
+        setUser(user);
+        navigation.navigate("Walkthrough");
+        return;
+      }
+    }
+    Alert.alert("Error", "Email is already in use");
   };
   return (
     <DissmissableArea>

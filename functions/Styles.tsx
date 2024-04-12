@@ -11,7 +11,7 @@ export default function getBackgroundStyle(colour: string, index: number) {
         color: "white",
         padding: 5,
         borderRadius: 30,
-        width: 105,
+        width: 100,
       };
     case "blue":
       return {
@@ -22,17 +22,16 @@ export default function getBackgroundStyle(colour: string, index: number) {
         color: "white",
         padding: 5,
         borderRadius: 30,
-        width: 105,
+        width: 100,
       };
     case "yellow":
       return {
- 
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: `rgba(235, 204, 52, ${opacity})`,
         padding: 5,
         borderRadius: 30,
-        width: 105,
+        width: 100,
       };
     case "red":
       return {
@@ -43,7 +42,7 @@ export default function getBackgroundStyle(colour: string, index: number) {
         color: "white",
         padding: 5,
         borderRadius: 30,
-        width: 105,
+        width: 100,
       };
   }
 }
