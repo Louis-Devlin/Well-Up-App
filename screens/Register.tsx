@@ -40,15 +40,17 @@ export default function Register({ route, navigation }: Props) {
       return;
     }
     const response = await ApiCall.Register(name, email, password);
+    console.log("Register Response:", response);
     if (response.statusCode == 201 && response.userId >= 0) {
       const user = await ApiCall.Login(email, password);
-      if (user.userId >= 0) {
+      console.log("User:", user);
+      if (user.user.userId >= 0) {
         setUser(user);
         navigation.navigate("Walkthrough");
-        return;
       }
+    } else {
+      Alert.alert("Error", "Email is already in use");
     }
-    Alert.alert("Error", "Email is already in use");
   };
   return (
     <DissmissableArea>

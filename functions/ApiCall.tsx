@@ -276,7 +276,7 @@ export class ApiCall {
       })
       .then((res) => {
         response.statusCode = res.status;
-        userId = res.data;
+        response.userId = res.data;
       })
       .catch((err) => {
         response.statusCode = err.response.status;
